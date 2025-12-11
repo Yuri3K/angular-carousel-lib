@@ -1,0 +1,20 @@
+<div
+  class="carousel__item"
+  >
+  <div class="carousel__container">
+    <div class="carousel__slide-content">
+      <h2 
+        class="carousel__slide-title"
+        [innerHTML]="slide.title"
+      ></h2>
+    <span class="carousel__slide-subtitle">{{slide.subtitle}}</span>
+      <p class="carousel__slide-descr">{{slide.descr}}</p>
+      <a 
+        [routerLink]="slide.link"
+        class="btn green carousel__slide-btn"
+      >
+        {{slide.btn}}
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+
+
+<div>
+  <ul>
+    @for(slideData of slides; track $index; let i = $index) {
+      <li>
+        <ng-container 
+          [ngTemplateOutlet]="slideTemplate"
+          [ngTemplateOutletContext]="{ $implicit: slideData, index: i }"
+        ></ng-container>
+      </li>
+    } 
+  </ul>
+</div>
