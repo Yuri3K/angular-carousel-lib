@@ -1,9 +1,14 @@
-
-
-<div>
-  <ul>
+<div
+  class="ngx-carousel"
+>
+  <ul
+    class="ngx-carousel__list"
+  >
     @for(slideData of slides; track $index; let i = $index) {
-      <li>
+      <li
+        class="ngx-carousel__slide"
+        [class.active]="i === carousel.currentSlide()"
+      >
         <ng-container 
           [ngTemplateOutlet]="slideTemplate"
           [ngTemplateOutletContext]="{ $implicit: slideData, index: i }"
@@ -11,4 +16,6 @@
       </li>
     } 
   </ul>
+
+  <lib-ngx-carousel-controls />
 </div>

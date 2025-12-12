@@ -1,0 +1,35 @@
+.ngx-carousel {
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 500px;
+}
+
+.ngx-carousel__list {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 0.5s ease;
+  user-select: none;
+
+  touch-action: pan-y; // важно: разрешаем вертикальный скролл
+  cursor: grab;
+}
+
+.ngx-carousel__slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  pointer-events: none;
+
+  &.active {
+    pointer-events: auto;
+  }
+}

@@ -1,18 +1,25 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterViewInit, Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, inject, Input, TemplateRef } from '@angular/core';
+import { NgxCarouselService } from './services/ngx-carousel.service';
+import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls/ngx-carousel-controls.component';
+
 
 @Component({
   selector: 'lib-ngx-carousel',
   imports: [
     NgTemplateOutlet,
+    NgxCarouselControlsComponent
   ],
   templateUrl: './ngx-carousel.component.html',
+  styleUrl: './ngx-carousel.component.scss'
 })
 export class NgxCarouselComponent implements AfterViewInit{
   @Input({required: true}) slides!: any[]
   @ContentChild('slideTemplate', {static: true}) slideTemplate!: TemplateRef<any>
+
+  carousel = inject(NgxCarouselService)
   
   ngAfterViewInit(): void {
-    
+    this.carousel.registerSlides(this.slides)
   }
 }
