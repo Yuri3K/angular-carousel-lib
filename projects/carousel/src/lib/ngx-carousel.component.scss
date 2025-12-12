@@ -3,7 +3,7 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  height: 500px;
+  height: auto;
 }
 
 .ngx-carousel__list {
@@ -16,7 +16,6 @@
   list-style: none;
   transition: transform 0.5s ease;
   user-select: none;
-
   touch-action: pan-y; // важно: разрешаем вертикальный скролл
   cursor: grab;
 }

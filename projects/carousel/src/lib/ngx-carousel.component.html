@@ -1,11 +1,16 @@
 <div
   class="ngx-carousel"
+  (mouseleave)="autoplay.resume()"
+  (mouseover)="autoplay.pause()"
+  (focusin)="autoplay.pause()"
+  (focusout)="autoplay.resume()"
 >
   <ul
     class="ngx-carousel__list"
   >
     @for(slideData of slides; track $index; let i = $index) {
       <li
+        [style.transform]="'translateX(-' + carousel.currentSlide() * 100 + '%)'"
         class="ngx-carousel__slide"
         [class.active]="i === carousel.currentSlide()"
       >

@@ -8,11 +8,11 @@ import { NGX_CAROUSEL_CONFIG } from 'carousel';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
-    // provideAnimations(),
+    provideAnimations(),
     {
       provide: NGX_CAROUSEL_CONFIG,
       useValue: {
-        autoplay: false, 
+        autoplay: true, 
         interval: 5000, 
         loop: true,
       }
