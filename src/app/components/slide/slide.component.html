@@ -10,6 +10,7 @@
     <span class="carousel__slide-subtitle">{{slide.subtitle}}</span>
       <p class="carousel__slide-descr">{{slide.descr}}</p>
       <a 
+        (click)="linkClicked()"
         [routerLink]="slide.link"
         class="btn green carousel__slide-btn"
       >

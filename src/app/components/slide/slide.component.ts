@@ -9,4 +9,8 @@ import { RouterLink } from "@angular/router";
 })
 export class SlideComponent {
   @Input({required: true}) slide!: any
+
+  linkClicked() {
+    console.log("LINK CLICKED!!!")
+  }
 }

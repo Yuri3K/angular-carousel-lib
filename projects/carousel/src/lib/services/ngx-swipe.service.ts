@@ -68,7 +68,7 @@ export class NgxSwipeService {
 
   onPointerUp(event: PointerEvent) {
     if (!this.isSwiping()) return;
-
+ 
     // 1. Включаем transition обратно, прежде чем менять currentSlide()
     this.renderer.setStyle(this.carouselList.nativeElement, 'transition', 'transform 0.5s ease');
 

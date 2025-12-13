@@ -8,8 +8,14 @@
   (focusout)="autoplay.resume()"
 >
   <ul
+    #carouselList
     class="ngx-carousel__list"
     [style.transform]="'translateX(-' + carousel.currentSlide() * 100 + '%)'"
+    (pointerdown)="swipe.onPointerDown($event)"
+    (pointermove)="swipe.onPointerMove($event)"
+    (pointerup)="swipe.onPointerUp($event)"
+    (pointercancel)="swipe.onPointerUp($event)"
+    (pointerleave)="swipe.onPointerUp($event)"
   >
     @for(slideData of slides; track $index; let i = $index) {
       <li
