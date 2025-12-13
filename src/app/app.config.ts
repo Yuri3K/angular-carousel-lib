@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: NGX_CAROUSEL_CONFIG,
       useValue: {
-        autoplay: true, 
+        autoplay: false, 
         interval: 5000, 
         loop: true,
       }

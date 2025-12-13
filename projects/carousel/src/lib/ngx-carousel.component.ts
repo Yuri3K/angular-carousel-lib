@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterViewInit, Component, ContentChild, inject, Input, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, inject, Input, TemplateRef, ViewChild } from '@angular/core';
 import { NgxCarouselService } from './services/ngx-carousel.service';
 import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls/ngx-carousel-controls.component';
 import { NgxAutoplayService } from './services/ngx-autoplay..service';
@@ -16,6 +16,7 @@ import { NgxAutoplayService } from './services/ngx-autoplay..service';
 })
 export class NgxCarouselComponent implements AfterViewInit{
   @Input({required: true}) slides!: any[]
+  @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', {static: true}) slideTemplate!: TemplateRef<any>
 
   carousel = inject(NgxCarouselService)

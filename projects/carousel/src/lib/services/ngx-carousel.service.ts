@@ -17,7 +17,6 @@ export class NgxCarouselService {
             ...DEFAULT_CAROUSEL_CONFIG,
             ...defaultCtf || {}
         })
-        console.log("🔸 this.config:", this.config())
     }
 
     getConfig(): NgxCarouselConfig {
@@ -33,7 +32,6 @@ export class NgxCarouselService {
     }
 
     next() {
-        console.log("NEXT")
         const length = this.getSlidesLength()
         if (length <= 0) return
         this.currentSlide.update(i => i + 1)
