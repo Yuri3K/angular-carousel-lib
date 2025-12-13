@@ -10,6 +10,7 @@
   <ul
     #carouselList
     class="ngx-carousel__list"
+    [class.no-transition]="carousel.disableTransition()"
     [style.transform]="'translateX(-' + carousel.currentSlide() * 100 + '%)'"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
@@ -17,7 +18,7 @@
     (pointercancel)="swipe.onPointerUp($event)"
     (pointerleave)="swipe.onPointerUp($event)"
   >
-    @for(slideData of slides; track $index; let i = $index) {
+    @for(slideData of carousel.slidesWithClones(); track $index; let i = $index) {
       <li
         class="ngx-carousel__slide"
         [class.active]="i === carousel.currentSlide()"

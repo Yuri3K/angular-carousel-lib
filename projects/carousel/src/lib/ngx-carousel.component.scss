@@ -18,6 +18,10 @@
   user-select: none;
   touch-action: pan-y; // важно: разрешаем вертикальный скролл
   cursor: grab;
+
+  &.no-transition {
+    transition: none !important;
+  }
 }
 
 .ngx-carousel__slide {
