@@ -1,4 +1,4 @@
-import { ElementRef, inject, Injectable, Renderer2, signal } from '@angular/core';
+import { computed, ElementRef, inject, Injectable, Renderer2, signal } from '@angular/core';
 import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxAutoplayService } from './ngx-autoplay..service';
 
@@ -19,6 +19,7 @@ export class NgxSwipeService {
   private currentX = 0;
 
   private isSwiping = signal(false);
+  private config = computed(() => this.carousel.getConfig())
 
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.
@@ -47,6 +48,16 @@ export class NgxSwipeService {
     if (!this.isSwiping()) return;
 
     this.currentX = event.clientX - this.startX;
+
+        // Если отключена бесконечная прокрутка, то останавливаем свайп
+    // при достижении первого и последнего слайда
+    if(!this.config().loop){
+      const length = this.carousel.getSlidesLength()
+      const current = this.carousel.currentSlide()
+      
+      if((current <= 0) && (this.currentX > 0)) return             // свайпаем на предыдущий слайд
+      if((current + 1 >= length) && (this.currentX < 0)) return    // свайпаем на следующий слайд
+    }
 
     // Проверяем, превысили ли мы порог, чтобы считать это "свайпом", а не кликом
     if (Math.abs(this.currentX) > this.CLICK_LIMIT) {

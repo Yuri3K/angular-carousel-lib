@@ -63,8 +63,6 @@ export class NgxCarouselService {
 
         this.disableTransition.set(false)
         const current = this.currentSlide()
-        console.log("🔸 length:", length)
-        console.log("🔸 current:", current)
 
         if (this.config().loop) {
             // Переходим к следующему слайду (даже если это клон)

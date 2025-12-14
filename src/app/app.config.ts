@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         autoplay: false, 
         interval: 5000, 
-        loop: true,
+        loop: false,
       }
     }
   ]
