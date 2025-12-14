@@ -1,29 +1,34 @@
-<div class="ngx-carousel__controls">
-  <button
-    (click)="carousel.prev()"
-  >
-  Prev
-  </button>
 
-  <button
-    (click)="carousel.next()"
-  >
-  Next
-  </button>
-</div>
-
-<div class="ngx-carousel__controls bullets">
-  <div 
-    class="ngx-carousel__dots"
-  >
-    @for(dot of carousel.slidesData(); track $index; let i = $index) {
-      <button
-        class="ngx-carousel__dot"
-        [class.active]="carousel.getDisplayIndex() == i"
-        (click)="carousel.goTo(i)"
-      ></button>
-    }
+@if(isArrows()) {
+  <div class="ngx-carousel__controls">
+    <button
+      (click)="carousel.prev()"
+    >
+    Prev
+    </button>
+  
+    <button
+      (click)="carousel.next()"
+    >
+    Next
+    </button>
   </div>
-</div>
+}
+
+@if(isDots()) {
+  <div class="ngx-carousel__controls bullets">
+    <div 
+      class="ngx-carousel__dots"
+    >
+      @for(dot of carousel.slidesData(); track $index; let i = $index) {
+        <button
+          class="ngx-carousel__dot"
+          [class.active]="carousel.getDisplayIndex() == i"
+          (click)="carousel.goTo(i)"
+        ></button>
+      }
+    </div>
+  </div>
+}
 
 

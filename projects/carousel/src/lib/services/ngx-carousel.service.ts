@@ -1,5 +1,5 @@
-import { computed, Inject, Injectable, Optional, signal } from "@angular/core";
-import { DEFAULT_CAROUSEL_CONFIG, NGX_CAROUSEL_CONFIG, NgxCarouselConfig } from "../ngx-carousel.types";
+import { computed, ElementRef, Inject, Injectable, Optional, Renderer2, signal } from "@angular/core";
+import { DEFAULT_CAROUSEL_CONFIG, NGX_CAROUSEL_CONFIG, NgxCarouselBreakpoint, NgxCarouselConfig } from "../ngx-carousel.types";
 
 @Injectable({
     providedIn: 'root'
@@ -7,26 +7,36 @@ import { DEFAULT_CAROUSEL_CONFIG, NGX_CAROUSEL_CONFIG, NgxCarouselConfig } from 
 
 export class NgxCarouselService {
     private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG)
+    // private renderer!: Renderer2;
+    // private carouselList!: HTMLDivElement;
+    private width = signal(0)
+    // activeBreakpoint = signal<NgxCarouselBreakpoint>({} as NgxCarouselBreakpoint)
+    
     slidesData = signal<any[]>([])
     disableTransition = signal(false)
     currentSlide = signal(0)
+    slidesToShow = computed(() => this.config().slidesToShow ?? 1)
+    activeConfig = computed(() => this.config())
 
     slidesWithClones = computed(() => {
         const slides = this.slidesData()
         const length = slides.length
+        const slidesToShow = this.slidesToShow()
 
         if (length <= 0) return []
 
-        if (this.config().loop && length > 1) {
+        if (this.config().loop && length >= slidesToShow) {
+            const startClones = slides.slice(length - slidesToShow) // Клоны последних N слайдов
+            const endClones = slides.slice(0, slidesToShow)         // Клоны первых N слайдов
+
             return [
-                slides[length - 1], // Клон последнего в начало
+                ...startClones, // Клон последнего в начало
                 ...slides,          // Все оригинальные
-                slides[0]           // Клон первого в конец
+                ...endClones           // Клон первого в конец
             ]
         }
 
         return slides
-
     })
 
 
@@ -37,17 +47,26 @@ export class NgxCarouselService {
             ...DEFAULT_CAROUSEL_CONFIG,
             ...defaultCtf || {}
         })
+
+        this.updateActiveBreakpoint(this.width())
+
+        // console.log("WIDTH", this.width)
     }
 
     getConfig(): NgxCarouselConfig {
         return this.config()
     }
 
+    setWidth(width: number) {
+        this.width.set(width)
+        this.updateActiveBreakpoint(width)
+    }
+
     registerSlides(slidesData: any[]) {
         this.slidesData.set(slidesData)
 
         const index = this.config().loop ?
-            ((this.config().startIndex ?? 0) + 1) :
+            ((this.config().startIndex ?? 0) + this.slidesToShow()) :
             (this.config().startIndex ?? 0)
 
         this.currentSlide.set(index)
@@ -57,21 +76,44 @@ export class NgxCarouselService {
         return this.slidesData().length
     }
 
+    updateActiveBreakpoint(width: number) {
+        const breakpoints = this.config().breakpoints || [];
+
+        // Сортируем брейкпоинты по убыванию
+        const sortedBreakpoints = [...breakpoints].sort((a, b) => b.breakpoint - a.breakpoint);
+
+        // Находим подходящий брейкпоинт
+        const active = sortedBreakpoints.find(bp => width >= bp.breakpoint) || {} as NgxCarouselBreakpoint;
+
+        // console.log("🔸 active:", active)
+        this.config.update(ctf => ({...ctf, ...active}))
+        // console.log("🔸 this.config:", this.config())
+        // this.activeBreakpoint.set(active);
+    }
+
     next() {
         const length = this.getSlidesLength()
         if (length <= 1) return
 
         this.disableTransition.set(false)
         const current = this.currentSlide()
+        const slidesToShow = this.slidesToShow()
 
         if (this.config().loop) {
             // Переходим к следующему слайду (даже если это клон)
             this.currentSlide.set(current + 1)
 
             // Если достигли клона
-            if (current + 1 >= length + 1) {
+            if (current + slidesToShow > length + slidesToShow) {
+                console.log("🔸 this.currentSlide:", this.currentSlide())
+                console.log("🔸 length:", length)
+                console.log("🔸 slidesToShow:", slidesToShow)
+                console.log("🔸 current:", current)
+                console.log("🔸 length + slidesToShow:", length + slidesToShow)
+                console.log("🔸 current + slidesToShow:", current + slidesToShow)
+                
                 // Сбрасываем на первый оригинальный слайд
-                this.scheduleSnapToReal(1)
+                this.scheduleSnapToReal(slidesToShow)
             }
         } else if (current + 1 < length) {
             // В режиме без loop просто проверяем границы
@@ -85,12 +127,14 @@ export class NgxCarouselService {
 
         this.disableTransition.set(false)
         const current = this.currentSlide()
+        const slidesToShow = this.slidesToShow()
 
         if (this.config().loop) {
+            // Переходим к предыдущему слайду (даже если это клон)
             this.currentSlide.set(current - 1)
 
-            if (current - 1 <= 0) {
-                this.scheduleSnapToReal(length)
+            if (current - slidesToShow <= 0) {
+                this.scheduleSnapToReal(length - 1 + slidesToShow)
             }
         } else if (current > 0) {
             this.currentSlide.set(current - 1)
@@ -117,31 +161,34 @@ export class NgxCarouselService {
     }
 
     goTo(index: number) {
-        const len = this.getSlidesLength();
-        if (len === 0) return;
+        const length = this.getSlidesLength();
+        if (length <= 0) return;
+
+        const slidestToShow = this.slidesToShow()
 
         if (this.config().loop) {
             // В режиме loop просто устанавливаем целевой индекс
-            this.currentSlide.set(index + 1);
+            this.currentSlide.set(index + slidestToShow);
         } else {
             this.currentSlide.set(index);
         }
     }
 
     getDisplayIndex(): number {
-        const len = this.getSlidesLength();
-        if (len === 0) return 0;
+        const length = this.getSlidesLength();
+        if (length <= 0) return 0;
 
         const current = this.currentSlide();
+        const slidesToShow = this.slidesToShow()
 
         // Если loop отключен, то просто вернем индекс текущего слайда
         if (!this.config().loop) return current
 
         // Если на клоне последнего (индекс 0), показываем последний реальный
-        if (current === 0) return len - 1;
+        if (current === 0) return length - 1;
 
         // Если на клоне первого (индекс len + 1), показываем первый реальный
-        if (current === len + 1) return 0;
+        if (current === length + 1) return 0;
 
         // Иначе вычитаем 1, так как реальные слайды начинаются с индекса 1
         return current - 1;

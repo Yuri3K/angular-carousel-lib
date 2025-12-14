@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { NgxCarouselService } from '../../services/ngx-carousel.service';
 
 @Component({
@@ -9,4 +9,9 @@ import { NgxCarouselService } from '../../services/ngx-carousel.service';
 })
 export class NgxCarouselControlsComponent {
   carousel = inject(NgxCarouselService)
+
+  private config = this.carousel.activeConfig
+
+  isDots = computed(() => this.config().showDots)
+  isArrows = computed(() => this.config().showArrows)
 }

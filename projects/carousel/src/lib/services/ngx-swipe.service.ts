@@ -29,7 +29,7 @@ export class NgxSwipeService {
     this.carouselList = element;
   }
 
-  setRenderer(renderer: Renderer2) {
+  registerRenderer(renderer: Renderer2) {
     this.renderer = renderer;
   }
 

@@ -1,4 +1,7 @@
-<lib-ngx-carousel [slides]="slides">
+<lib-ngx-carousel 
+  [slides]="slides"
+  [windowWidth]="windowWidth"
+  >
   <ng-template #slideTemplate let-slide>
     <app-slide [slide]="slide" />
   </ng-template>

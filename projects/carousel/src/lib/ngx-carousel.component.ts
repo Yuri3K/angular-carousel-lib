@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterViewInit, Component, ContentChild, ElementRef, inject, Input, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, inject, Input, OnChanges, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { NgxCarouselService } from './services/ngx-carousel.service';
 import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls/ngx-carousel-controls.component';
 import { NgxAutoplayService } from './services/ngx-autoplay..service';
@@ -15,8 +15,9 @@ import { NgxSwipeService } from './services/ngx-swipe.service';
   templateUrl: './ngx-carousel.component.html',
   styleUrl: './ngx-carousel.component.scss'
 })
-export class NgxCarouselComponent implements AfterViewInit{
+export class NgxCarouselComponent implements AfterViewInit, OnChanges{
   @Input({required: true}) slides!: any[]
+  @Input({required: true}) windowWidth = 0
   @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', {static: true}) slideTemplate!: TemplateRef<any>
 
@@ -25,10 +26,20 @@ export class NgxCarouselComponent implements AfterViewInit{
   carousel = inject(NgxCarouselService)
   autoplay = inject(NgxAutoplayService)
   swipe = inject(NgxSwipeService)
+
+  
   
   ngAfterViewInit(): void {
     this.carousel.registerSlides(this.slides)
+    // this.carousel.registerSlideList(this.carouselList.nativeElement)
+    // this.carousel.registerRenderer(this.renderer)
     this.swipe.registerSlideList(this.carouselList)
-    this.swipe.setRenderer(this.renderer)
+    this.swipe.registerRenderer(this.renderer)
+
+    this.carousel.setWidth(this.windowWidth)
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.carousel.setWidth(changes['windowWidth'].currentValue)
   }
 }

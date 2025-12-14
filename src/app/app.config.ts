@@ -12,9 +12,32 @@ export const appConfig: ApplicationConfig = {
     {
       provide: NGX_CAROUSEL_CONFIG,
       useValue: {
-        autoplay: false, 
-        interval: 5000, 
-        loop: false,
+        autoplay: false,
+        interval: 1000,
+        loop: true,
+        startIndex: 0,
+        pauseOnHover: true,
+        slidesToShow: 4,
+        showDots: true,
+        showArrows: true,
+        breakpoints: [
+          {
+            breakpoint: 0, // от 768
+            showArrows: false,
+            showDots: true,
+          },
+          {
+            breakpoint: 768, // от 768
+            showArrows: false,
+            showDots: true,
+          },
+          {
+            breakpoint: 1024, // от 1024
+            showArrows: true,
+            showDots: false,
+          },
+          
+        ]
       }
     }
   ]
