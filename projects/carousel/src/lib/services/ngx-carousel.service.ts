@@ -92,7 +92,7 @@ export class NgxCarouselService {
     }
 
     next() {
-        const length = this.getSlidesLength()
+        const length = this.slidesWithClones().length
         if (length <= 1) return
 
         this.disableTransition.set(false)
@@ -104,14 +104,7 @@ export class NgxCarouselService {
             this.currentSlide.set(current + 1)
 
             // Если достигли клона
-            if (current + slidesToShow > length + slidesToShow) {
-                console.log("🔸 this.currentSlide:", this.currentSlide())
-                console.log("🔸 length:", length)
-                console.log("🔸 slidesToShow:", slidesToShow)
-                console.log("🔸 current:", current)
-                console.log("🔸 length + slidesToShow:", length + slidesToShow)
-                console.log("🔸 current + slidesToShow:", current + slidesToShow)
-                
+            if (current + slidesToShow >= length - 1) {
                 // Сбрасываем на первый оригинальный слайд
                 this.scheduleSnapToReal(slidesToShow)
             }
@@ -122,7 +115,7 @@ export class NgxCarouselService {
     }
 
     prev() {
-        const length = this.getSlidesLength()
+        const length = this.slidesWithClones().length
         if (length <= 1) return
 
         this.disableTransition.set(false)
@@ -134,7 +127,7 @@ export class NgxCarouselService {
             this.currentSlide.set(current - 1)
 
             if (current - slidesToShow <= 0) {
-                this.scheduleSnapToReal(length - 1 + slidesToShow)
+                this.scheduleSnapToReal(length - 1 - slidesToShow)
             }
         } else if (current > 0) {
             this.currentSlide.set(current - 1)

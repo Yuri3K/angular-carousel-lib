@@ -14,10 +14,10 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         autoplay: false,
         interval: 1000,
-        loop: true,
+        loop: false,
         startIndex: 0,
         pauseOnHover: true,
-        slidesToShow: 4,
+        slidesToShow: 3,
         showDots: true,
         showArrows: true,
         breakpoints: [
