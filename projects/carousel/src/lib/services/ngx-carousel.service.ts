@@ -168,7 +168,7 @@ export class NgxCarouselService {
     }
 
     getDisplayIndex(): number {
-        const length = this.getSlidesLength();
+        const length = this.slidesWithClones().length;
         if (length <= 0) return 0;
 
         const current = this.currentSlide();
@@ -181,10 +181,10 @@ export class NgxCarouselService {
         if (current === 0) return length - 1;
 
         // Если на клоне первого (индекс len + 1), показываем первый реальный
-        if (current === length + 1) return 0;
+        if (current === length - slidesToShow) return 0;
 
-        // Иначе вычитаем 1, так как реальные слайды начинаются с индекса 1
-        return current - 1;
+        // Иначе вычитаем slidesToShow, так как реальные слайды начинаются с индекса slidesToShow
+        return current - slidesToShow;
     }
 
 
