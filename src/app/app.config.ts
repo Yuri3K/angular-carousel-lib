@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
         loop: true,
         startIndex: 0,
         pauseOnHover: true,
-        slidesToShow: 3,
+        slidesToShow: 1,
         showDots: true,
         showArrows: true,
         breakpoints: [
@@ -25,14 +25,14 @@ export const appConfig: ApplicationConfig = {
             breakpoint: 0, // до 768
             showArrows: false,
             showDots: true,
-            slidesToShow: 1,
+            slidesToShow: 3,
 
           },
           {
             breakpoint: 768, // от 768
             showArrows: false,
             showDots: true,
-            slidesToShow: 2,
+            slidesToShow: 3,
           },
           {
             breakpoint: 1024, // от 1024

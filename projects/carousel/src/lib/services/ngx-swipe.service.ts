@@ -15,7 +15,7 @@ import { NgxAutoplayService } from './ngx-autoplay..service';
 export class NgxSwipeService {
   // Порог в пикселях для различения клика и свайпа
   private readonly CLICK_LIMIT = 5; // px
-  private readonly SWIPE_LIMIT = 0.25; // %
+  private readonly SWIPE_LIMIT = 0.1; // %
 
   private carousel = inject(NgxCarouselService);
   private autoplay = inject(NgxAutoplayService);
@@ -121,8 +121,33 @@ export class NgxSwipeService {
     );
 
     const swipeDistance = this.currentX;
-    // const limit =
-    //   this.carouselList.nativeElement.clientWidth * this.SWIPE_LIMIT;
+    const limit =
+      this.carouselList.nativeElement.clientWidth * this.SWIPE_LIMIT;
+
+    const slideWidth =
+      this.carouselList.nativeElement.clientWidth /
+      this.carousel.slidesToShow();
+
+    const slidesDragged = Math.round(swipeDistance / slideWidth);
+
+    // Влево → положительное число
+    const delta = -slidesDragged;
+
+    if (swipeDistance < -limit) {
+      Math.abs(delta) > 0 ?
+        this.carousel.shiftBy(delta) :
+        this.carousel.next();
+    } else if (swipeDistance > limit) {
+      Math.abs(delta) > 0 ?
+        this.carousel.shiftBy(delta) :
+        this.carousel.prev();
+    } else {
+      if (Math.abs(swipeDistance) > this.CLICK_LIMIT) {
+        this.snapBack();
+      }
+    }
+
+
 
     // if (swipeDistance < -limit) {
     //   this.carousel.next();
@@ -134,22 +159,17 @@ export class NgxSwipeService {
     //   this.snapBack();
     // }
 
-    const slideWidth =
-      this.carouselList.nativeElement.clientWidth /
-      this.carousel.slidesToShow();
 
-    const slidesDragged = Math.round(swipeDistance / slideWidth);
 
-    // Влево → положительное число
-    const delta = -slidesDragged;
+    // if (Math.abs(slidesDragged) > 0) {
+    //   this.carousel.shiftBy(delta);
+    // } else {
+    //   if (Math.abs(swipeDistance) > this.CLICK_LIMIT) {
+    //     this.snapBack();
+    //   }
+    // }
 
-    if (Math.abs(slidesDragged) > 0) {
-      this.carousel.shiftBy(delta);
-    } else {
-      if (Math.abs(swipeDistance) > this.CLICK_LIMIT) {
-        this.snapBack();
-      }
-    }
+
 
     // 2. Сбрасываем флаги
     this.isSwiping.set(false);
@@ -169,6 +189,7 @@ export class NgxSwipeService {
   // }
 
   private snapBack() {
+    console.log("🔸 snapBack:",)
     const step = 100 / this.carousel.slidesToShow();
 
     const offset = -this.carousel.currentSlide() * step;
