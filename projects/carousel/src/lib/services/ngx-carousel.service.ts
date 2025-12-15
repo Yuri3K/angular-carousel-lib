@@ -21,6 +21,7 @@ export class NgxCarouselService {
   private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
   private width = signal(0);
   private isSnapping = false;
+  private snapTimer: any = null
 
   slidesData = signal<any[]>([]);
   disableTransition = signal(false);
@@ -116,7 +117,8 @@ export class NgxCarouselService {
       // Если достигли клона
       if (current + slidesToShow >= length - 1) {
         // Сбрасываем на первый оригинальный слайд
-        this.scheduleSnapToReal(slidesToShow);
+        const index = this.getRealIndex(current - 1)
+        this.scheduleSnapToReal(index);
       }
     } else if (current + 1 < length) {
       // В режиме без loop просто проверяем границы
@@ -148,10 +150,17 @@ export class NgxCarouselService {
    * Мгновенный переход к реальному слайду после завершения анимации
    */
   private scheduleSnapToReal(realIndex: number) {
-    if (this.isSnapping) return;
+    if (this.isSnapping) {
+      if (this.snapTimer) {
+        clearTimeout(this.snapTimer)
+      }
+      this.snapTimer = null
+    };
+
     this.isSnapping = true;
+
     // Дожидаемся завершения анимации
-    setTimeout(() => {
+    this.snapTimer = setTimeout(() => {
       // Отключаем анимацию
       this.disableTransition.set(true);
 
@@ -165,6 +174,10 @@ export class NgxCarouselService {
         requestAnimationFrame(() => {
           this.disableTransition.set(false);
           this.isSnapping = false;
+          if (this.snapTimer) {
+            clearTimeout(this.snapTimer)
+          }
+          this.snapTimer = null
         });
       });
     }, 500); // Должно совпадать с длительностью transition в CSS
@@ -178,9 +191,12 @@ export class NgxCarouselService {
       this.disableTransition.set(true);
       this.currentSlide.set(realTarget);
 
-      setTimeout(() => {
-        this.disableTransition.set(false);
-      }, 50);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.disableTransition.set(false);
+        });
+      });
+
     }, 500);
   }
 
@@ -252,7 +268,6 @@ export class NgxCarouselService {
     const current = this.currentSlide();
     const slidesToShow = this.slidesToShow();
     const total = this.slidesWithClones().length;
-    const realLength = this.getSlidesLength();
 
     let target = current + delta;
 
