@@ -23,7 +23,7 @@
     @for(slideData of carousel.slidesWithClones(); track $index; let i = $index) {
       <li
         class="ngx-carousel__slide"
-        [class.active]="i === carousel.currentSlide()"
+        [class.active]="i === carousel.currentSlide() && carousel.slidesToShow() == 1"
         [style.width]="(100 / carousel.slidesToShow()) + '%'"
       >
         <ng-container 
