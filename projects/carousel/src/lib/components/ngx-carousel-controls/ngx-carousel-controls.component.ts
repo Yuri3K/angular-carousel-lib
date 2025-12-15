@@ -12,9 +12,7 @@ export class NgxCarouselControlsComponent {
 
   private config = this.carousel.activeConfig
 
-  isDots = computed(() => {
-    console.log(this.config())
-    return this.config().showDots
-  })
+  isDots = computed(() => this.config().showDots)
+
   isArrows = computed(() => this.config().showArrows)
 }

@@ -19,10 +19,8 @@ import {
 })
 export class NgxCarouselService {
   private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
-  // private renderer!: Renderer2;
-  // private carouselList!: HTMLDivElement;
   private width = signal(0);
-  // activeBreakpoint = signal<NgxCarouselBreakpoint>({} as NgxCarouselBreakpoint)
+  private isSnapping = false;
 
   slidesData = signal<any[]>([]);
   disableTransition = signal(false);
@@ -150,6 +148,8 @@ export class NgxCarouselService {
    * Мгновенный переход к реальному слайду после завершения анимации
    */
   private scheduleSnapToReal(realIndex: number) {
+    if (this.isSnapping) return;
+    this.isSnapping = true;
     // Дожидаемся завершения анимации
     setTimeout(() => {
       // Отключаем анимацию
@@ -158,11 +158,30 @@ export class NgxCarouselService {
       // Выполняем мгновенное переключение слайда без анимации
       this.currentSlide.set(realIndex);
 
-      // Чтобы операция включения анимации выполнилась на следующем цикле Event Loop, задаем таймер
+      // 1-й requestAnimationFrame — применить transform
+      // 2-й requestAnimationFrame — зафиксировать layout
+      // только потом включаем transition
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.disableTransition.set(false);
+          this.isSnapping = false;
+        });
+      });
+    }, 500); // Должно совпадать с длительностью transition в CSS
+  }
+
+  private scheduleSnapToRealIndex(realIndex: number) {
+    const slidesToShow = this.slidesToShow();
+    const realTarget = realIndex + slidesToShow;
+
+    setTimeout(() => {
+      this.disableTransition.set(true);
+      this.currentSlide.set(realTarget);
+
       setTimeout(() => {
         this.disableTransition.set(false);
       }, 50);
-    }, 500); // Должно совпадать с длительностью transition в CSS
+    }, 500);
   }
 
   goTo(index: number) {
@@ -199,31 +218,76 @@ export class NgxCarouselService {
     return current - slidesToShow;
   }
 
+  // shiftBy(delta: number) {
+  //   if (delta === 0) return;
+
+  //   const current = this.currentSlide();
+  //   const slidesToShow = this.slidesToShow();
+  //   const length = this.slidesWithClones().length;
+
+  //   this.disableTransition.set(false);
+
+  //   let target = current + delta;
+
+  //   if (!this.config().loop) {
+  //     const max = length - slidesToShow;
+  //     target = Math.max(0, Math.min(target, max));
+  //   }
+
+  //   this.currentSlide.set(target);
+
+  //   if (this.config().loop) {
+  //     if (target + slidesToShow >= length - 1) {
+  //       this.scheduleSnapToReal(slidesToShow);
+  //     }
+  //     if (target <= 0) {
+  //       this.scheduleSnapToReal(length - 1 - slidesToShow);
+  //     }
+  //   }
+  // }
+
   shiftBy(delta: number) {
     if (delta === 0) return;
 
     const current = this.currentSlide();
     const slidesToShow = this.slidesToShow();
-    const length = this.slidesWithClones().length;
-
-    this.disableTransition.set(false);
+    const total = this.slidesWithClones().length;
+    const realLength = this.getSlidesLength();
 
     let target = current + delta;
 
+    this.disableTransition.set(false);
+
     if (!this.config().loop) {
-      const max = length - slidesToShow;
+      const max = total - slidesToShow;
       target = Math.max(0, Math.min(target, max));
+      this.currentSlide.set(target);
+      return;
     }
 
     this.currentSlide.set(target);
 
-    if (this.config().loop) {
-      if (target + slidesToShow >= length - 1) {
-        this.scheduleSnapToReal(slidesToShow);
-      }
-      if (target <= 0) {
-        this.scheduleSnapToReal(length - 1 - slidesToShow);
-      }
+    // вычисляем РЕАЛЬНЫЙ индекс
+    const realIndex = this.getRealIndex(target);
+
+    // если ушли в клоны — снапаемся туда же, но в реальной зоне
+    if (target < slidesToShow || target >= total - slidesToShow) {
+      this.scheduleSnapToRealIndex(realIndex);
     }
+  }
+
+  private getRealIndex(virtualIndex: number): number {
+    const length = this.getSlidesLength();
+    const slidesToShow = this.slidesToShow();
+
+    if (!this.config().loop) return virtualIndex;
+
+    // виртуальный индекс → реальный
+    let real = virtualIndex - slidesToShow;
+
+    if (real < 0) real += length;
+    if (real >= length) real -= length;
+
+    return real;
   }
 }

@@ -130,7 +130,6 @@ export class NgxSwipeService {
 
     const slidesDragged = Math.round(swipeDistance / slideWidth);
 
-    // Влево → положительное число
     const delta = -slidesDragged;
 
     if (swipeDistance < -limit) {
@@ -146,30 +145,6 @@ export class NgxSwipeService {
         this.snapBack();
       }
     }
-
-
-
-    // if (swipeDistance < -limit) {
-    //   this.carousel.next();
-    // } else if (swipeDistance > limit) {
-    //   this.carousel.prev();
-    // } else {
-    //   // Возврат на место, так как длинна свайпа недостаточная по длинне
-    //   // (так как transition уже включен, это будет плавно)
-    //   this.snapBack();
-    // }
-
-
-
-    // if (Math.abs(slidesDragged) > 0) {
-    //   this.carousel.shiftBy(delta);
-    // } else {
-    //   if (Math.abs(swipeDistance) > this.CLICK_LIMIT) {
-    //     this.snapBack();
-    //   }
-    // }
-
-
 
     // 2. Сбрасываем флаги
     this.isSwiping.set(false);
@@ -189,7 +164,6 @@ export class NgxSwipeService {
   // }
 
   private snapBack() {
-    console.log("🔸 snapBack:",)
     const step = 100 / this.carousel.slidesToShow();
 
     const offset = -this.carousel.currentSlide() * step;
