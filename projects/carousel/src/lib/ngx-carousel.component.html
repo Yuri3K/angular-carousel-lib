@@ -14,6 +14,7 @@
     [style.transform]="'translateX(-' + 
       carousel.currentSlide() * (100 / carousel.slidesToShow()) + 
       '%)'"
+    [style.transition]="`transform ${carousel.getConfig().speed}ms ease`"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"

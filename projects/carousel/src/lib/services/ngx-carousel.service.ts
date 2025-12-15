@@ -1,10 +1,8 @@
 import {
   computed,
-  ElementRef,
   Inject,
   Injectable,
   Optional,
-  Renderer2,
   signal,
 } from '@angular/core';
 import {
@@ -20,9 +18,9 @@ import {
 export class NgxCarouselService {
   private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
   private width = signal(0);
-  private isSnapping = false;
   private snapTimer: any = null
-
+  
+  isSnapping = false;
   slidesData = signal<any[]>([]);
   disableTransition = signal(false);
   currentSlide = signal(0);
@@ -117,8 +115,8 @@ export class NgxCarouselService {
       // Если достигли клона
       if (current + slidesToShow >= length - 1) {
         // Сбрасываем на первый оригинальный слайд
-        const index = this.getRealIndex(current - 1)
-        this.scheduleSnapToReal(index);
+        const index = this.getRealIndex(current + 1)
+        this.scheduleSnapToRealIndex(index);
       }
     } else if (current + 1 < length) {
       // В режиме без loop просто проверяем границы
@@ -139,17 +137,52 @@ export class NgxCarouselService {
       this.currentSlide.set(current - 1);
 
       if (current - slidesToShow <= 0) {
-        this.scheduleSnapToReal(length - 1 - slidesToShow);
+        const index = this.getRealIndex(current - 1)
+        this.scheduleSnapToRealIndex(index);
       }
     } else if (current > 0) {
       this.currentSlide.set(current - 1);
     }
   }
 
-  /**
-   * Мгновенный переход к реальному слайду после завершения анимации
-   */
-  private scheduleSnapToReal(realIndex: number) {
+  // /**
+  //  * Мгновенный переход к реальному слайду после завершения анимации
+  //  */
+  // private scheduleSnapToReal(realIndex: number) {
+  //   if (this.isSnapping) {
+  //     if (this.snapTimer) {
+  //       clearTimeout(this.snapTimer)
+  //     }
+  //     this.snapTimer = null
+  //   };
+
+  //   this.isSnapping = true;
+
+  //   // Дожидаемся завершения анимации
+  //   this.snapTimer = setTimeout(() => {
+  //     // Отключаем анимацию
+  //     this.disableTransition.set(true);
+
+  //     // Выполняем мгновенное переключение слайда без анимации
+  //     this.currentSlide.set(realIndex);
+
+  //     // 1-й requestAnimationFrame — применить transform
+  //     // 2-й requestAnimationFrame — зафиксировать layout
+  //     // только потом включаем transition
+  //     requestAnimationFrame(() => {
+  //       requestAnimationFrame(() => {
+  //         this.disableTransition.set(false);
+  //         this.isSnapping = false;
+  //         if (this.snapTimer) {
+  //           clearTimeout(this.snapTimer)
+  //         }
+  //         this.snapTimer = null
+  //       });
+  //     });
+  //   }, 500); // Должно совпадать с длительностью transition в CSS
+  // }
+
+  private scheduleSnapToRealIndex(realIndex: number) {
     if (this.isSnapping) {
       if (this.snapTimer) {
         clearTimeout(this.snapTimer)
@@ -158,18 +191,13 @@ export class NgxCarouselService {
     };
 
     this.isSnapping = true;
+    const slidesToShow = this.slidesToShow();
+    const realTarget = realIndex + slidesToShow;
 
-    // Дожидаемся завершения анимации
     this.snapTimer = setTimeout(() => {
-      // Отключаем анимацию
       this.disableTransition.set(true);
+      this.currentSlide.set(realTarget);
 
-      // Выполняем мгновенное переключение слайда без анимации
-      this.currentSlide.set(realIndex);
-
-      // 1-й requestAnimationFrame — применить transform
-      // 2-й requestAnimationFrame — зафиксировать layout
-      // только потом включаем transition
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           this.disableTransition.set(false);
@@ -180,24 +208,7 @@ export class NgxCarouselService {
           this.snapTimer = null
         });
       });
-    }, 500); // Должно совпадать с длительностью transition в CSS
-  }
-
-  private scheduleSnapToRealIndex(realIndex: number) {
-    const slidesToShow = this.slidesToShow();
-    const realTarget = realIndex + slidesToShow;
-
-    setTimeout(() => {
-      this.disableTransition.set(true);
-      this.currentSlide.set(realTarget);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.disableTransition.set(false);
-        });
-      });
-
-    }, 500);
+    }, this.config().speed);
   }
 
   goTo(index: number) {

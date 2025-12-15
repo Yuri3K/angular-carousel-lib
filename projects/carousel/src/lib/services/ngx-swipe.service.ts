@@ -15,7 +15,7 @@ import { NgxAutoplayService } from './ngx-autoplay..service';
 export class NgxSwipeService {
   // Порог в пикселях для различения клика и свайпа
   private readonly CLICK_LIMIT = 5; // px
-  private readonly SWIPE_LIMIT = 0.1; // %
+  private readonly SWIPE_LIMIT = 0.05; // %
 
   private carousel = inject(NgxCarouselService);
   private autoplay = inject(NgxAutoplayService);
@@ -25,12 +25,12 @@ export class NgxSwipeService {
   private startX = 0;
   private currentX = 0;
 
-  private isSwiping = signal(false);
   private config = computed(() => this.carousel.getConfig());
-
+  
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.
   isSwipedEnough = signal(false);
+  isSwiping = signal(false);
 
   registerSlideList(element: ElementRef<HTMLDivElement>) {
     this.carouselList = element;

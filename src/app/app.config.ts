@@ -20,25 +20,26 @@ export const appConfig: ApplicationConfig = {
         slidesToShow: 1,
         showDots: true,
         showArrows: true,
+        speed: 500,
         breakpoints: [
           {
             breakpoint: 0, // до 768
             showArrows: false,
             showDots: true,
-            slidesToShow: 3,
+            slidesToShow: 2,
 
           },
           {
             breakpoint: 768, // от 768
             showArrows: false,
             showDots: true,
-            slidesToShow: 3,
+            slidesToShow: 2,
           },
           {
             breakpoint: 1024, // от 1024
             showArrows: true,
             showDots: false,
-            slidesToShow: 3,
+            slidesToShow: 2,
           },
 
         ]
