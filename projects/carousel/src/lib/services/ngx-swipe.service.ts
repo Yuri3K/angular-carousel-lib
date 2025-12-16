@@ -26,7 +26,7 @@ export class NgxSwipeService {
   private currentX = 0;
 
   private config = computed(() => this.carousel.getConfig());
-  
+
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.
   isSwipedEnough = signal(false);
@@ -81,20 +81,30 @@ export class NgxSwipeService {
       this.carouselList.nativeElement.setPointerCapture(event.pointerId);
     }
 
-    const slidePercent = 100 / this.carousel.slidesToShow(); // %
+    const baseTranslate = -this.carousel.currentSlide() * this.carousel.slideStepPx();
 
-    const baseOffset = -this.carousel.currentSlide() * slidePercent;
-
-    const dragOffset =
-      (this.currentX / this.carouselList.nativeElement.clientWidth) * 100;
-
-    const offset = baseOffset + dragOffset;
+    const offsetPx = baseTranslate + this.currentX;
 
     this.renderer.setStyle(
       this.carouselList.nativeElement,
       'transform',
-      `translateX(${offset}%)`
+      `translateX(${offsetPx}px)`
     );
+
+    // const slidePercent = 100 / this.carousel.slidesToShow(); // %
+
+    // const baseOffset = -this.carousel.currentSlide() * slidePercent;
+
+    // const dragOffset =
+    //   (this.currentX / this.carouselList.nativeElement.clientWidth) * 100;
+
+    // const offset = baseOffset + dragOffset;
+
+    // this.renderer.setStyle(
+    //   this.carouselList.nativeElement,
+    //   'transform',
+    //   `translateX(${offset}%)`
+    // );
 
     // СТАРАЯ ЛОГИКА НАПИСАННАЯ ПОД SLIDESTOSHOW = 1
     // // Смещение в процентах (пользовательское + текущий слайд)
@@ -117,19 +127,21 @@ export class NgxSwipeService {
     this.renderer.setStyle(
       this.carouselList.nativeElement,
       'transition',
-      'transform 0.5s ease'
+      `transform ${this.carousel.getConfig().speed}ms ease`
     );
 
     const swipeDistance = this.currentX;
     const limit =
       this.carouselList.nativeElement.clientWidth * this.SWIPE_LIMIT;
 
-    const slideWidth =
-      this.carouselList.nativeElement.clientWidth /
-      this.carousel.slidesToShow();
+    // const slideWidth =
+    //   this.carouselList.nativeElement.clientWidth /
+    //   this.carousel.slidesToShow();
 
-    const slidesDragged = Math.round(swipeDistance / slideWidth);
+    // const slidesDragged = Math.round(swipeDistance / slideWidth);
 
+    const step = this.carousel.slideStepPx();
+    const slidesDragged = Math.round(swipeDistance / step);
     const delta = -slidesDragged;
 
     if (swipeDistance < -limit) {
@@ -164,15 +176,16 @@ export class NgxSwipeService {
   // }
 
   private snapBack() {
-    const step = 100 / this.carousel.slidesToShow();
+    // const step = 100 / this.carousel.slidesToShow();
+    // const offset = -this.carousel.currentSlide() * step;
 
-    const offset = -this.carousel.currentSlide() * step;
+    const offset = -this.carousel.currentSlide() * this.carousel.slideStepPx();
 
     // Просто устанавливаем transform в текущую позицию. Transition уже включен в onPointerUp.
     this.renderer.setStyle(
       this.carouselList.nativeElement,
       'transform',
-      `translateX(${offset}%)`
+      `translateX(${offset}px)`
     );
   }
 }

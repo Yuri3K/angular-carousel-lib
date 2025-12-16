@@ -2,14 +2,12 @@
 @if(isArrows()) {
   <div class="ngx-carousel__controls">
     <button
-      [disabled]="carousel.isSnapping"
       (click)="carousel.prev()"
     >
     Prev
     </button>
   
     <button
-    [disabled]="carousel.isSnapping"
       (click)="carousel.next()"
     >
     Next

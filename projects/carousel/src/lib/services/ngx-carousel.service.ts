@@ -30,11 +30,11 @@ export class NgxCarouselService {
   space = computed(() => this.config().spaceBetween ?? 0);
   activeConfig = computed(() => this.config());
   slideWidthPx = computed(() =>
+    // containreWidth - space * (slidesToShow - 1)) / slidesToShow
     this.carouselList() ?
       (this.carouselList()!.clientWidth / this.slidesToShow()) - this.space() / 2 :
       0
   );
-  // containreWidth - space * (slidesToShow - 1)) / slidesToShow
   slideStepPx = computed(() => this.slideWidthPx() + (this.config().spaceBetween ?? 0));
   translatePx = computed(() => `translateX(-${this.currentSlide() * this.slideStepPx()}px)`);
 
