@@ -21,10 +21,12 @@ export class NgxCarouselService {
   private snapTimer: any = null
   
   isSnapping = false;
+  isAnimating = signal(false)
   slidesData = signal<any[]>([]);
   disableTransition = signal(false);
   currentSlide = signal(0);
   slidesToShow = computed(() => this.config().slidesToShow ?? 1);
+  space = computed(() => this.config().spaceBetween ?? 0);
   activeConfig = computed(() => this.config());
 
   slidesWithClones = computed(() => {
@@ -101,6 +103,8 @@ export class NgxCarouselService {
   }
 
   next() {
+    if (!this.startAnimation()) return
+
     const length = this.slidesWithClones().length;
     if (length <= 1) return;
 
@@ -125,6 +129,8 @@ export class NgxCarouselService {
   }
 
   prev() {
+    if (!this.startAnimation()) return
+
     const length = this.slidesWithClones().length;
     if (length <= 1) return;
 
@@ -275,6 +281,7 @@ export class NgxCarouselService {
 
   shiftBy(delta: number) {
     if (delta === 0) return;
+    if (!this.startAnimation()) return
 
     const current = this.currentSlide();
     const slidesToShow = this.slidesToShow();
@@ -316,4 +323,19 @@ export class NgxCarouselService {
 
     return real;
   }
+
+  private startAnimation(): boolean {
+    if (this.isAnimating()) return false
+    this.isAnimating.set(true)
+
+    const duration = this.config().speed ?? 500
+
+    setTimeout(() => {
+      this.isAnimating.set(false)
+    }, duration);
+
+    return true
+  }
+
+  
 }

@@ -21,6 +21,7 @@ export const appConfig: ApplicationConfig = {
         showDots: true,
         showArrows: true,
         speed: 500,
+        spaceBetween: 0,
         breakpoints: [
           {
             breakpoint: 0, // до 768
