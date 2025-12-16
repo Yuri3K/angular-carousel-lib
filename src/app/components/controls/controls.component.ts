@@ -1,0 +1,11 @@
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-controls',
+  imports: [],
+  templateUrl: './controls.component.html',
+  styleUrl: './controls.component.scss'
+})
+export class ControlsComponent {
+  @Input() carousel!: any
+}

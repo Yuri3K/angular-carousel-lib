@@ -21,6 +21,7 @@ export class NgxCarouselComponent implements AfterViewInit, OnChanges{
   @Input({required: true}) windowWidth = 0
   @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', {static: true}) slideTemplate!: TemplateRef<any>
+  @ContentChild('controlsTemplate', {static: true}) controlsTemplate!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2)
 
