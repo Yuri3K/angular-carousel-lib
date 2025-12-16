@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  top: 50%;
+  // top: 50%;
+  top: var(--controls-top, 50%);
   transform: translateY(-50%);
   left: 0;
   right: 0;

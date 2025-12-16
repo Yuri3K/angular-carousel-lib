@@ -1,3 +1,7 @@
+:host {
+  --controls-top: 50%;
+}
+
 .ngx-carousel {
   outline: none;
   overflow: hidden;
@@ -32,7 +36,6 @@
   position: relative;
   // pointer-events: none;
   box-shadow: 0px 0px 0px 1px #000;
-  
 
   &.active {
     // pointer-events: auto;

@@ -13,7 +13,8 @@ import { NgxSwipeService } from './services/ngx-swipe.service';
     NgxCarouselControlsComponent
   ],
   templateUrl: './ngx-carousel.component.html',
-  styleUrl: './ngx-carousel.component.scss'
+  styleUrl: './ngx-carousel.component.scss',
+
 })
 export class NgxCarouselComponent implements AfterViewInit, OnChanges{
   @Input({required: true}) slides!: any[]
