@@ -17,9 +17,10 @@ import {
 })
 export class NgxCarouselService {
   private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
-  private width = signal(0);
+  private width = signal(0); // window width
   private snapTimer: any = null
-  
+  private carouselList = signal<HTMLDivElement | null>(null)
+
   isSnapping = false;
   isAnimating = signal(false)
   slidesData = signal<any[]>([]);
@@ -28,6 +29,14 @@ export class NgxCarouselService {
   slidesToShow = computed(() => this.config().slidesToShow ?? 1);
   space = computed(() => this.config().spaceBetween ?? 0);
   activeConfig = computed(() => this.config());
+  slideWidthPx = computed(() =>
+    this.carouselList() ?
+      (this.carouselList()!.clientWidth / this.slidesToShow()) - this.space() / 2 :
+      0
+  );
+  // containreWidth - space * (slidesToShow - 1)) / slidesToShow
+  slideStepPx = computed(() => this.slideWidthPx() + (this.config().spaceBetween ?? 0));
+  translatePx = computed(() => `translateX(-${this.currentSlide() * this.slideStepPx()}px)`);
 
   slidesWithClones = computed(() => {
     const slides = this.slidesData();
@@ -70,6 +79,10 @@ export class NgxCarouselService {
   setWidth(width: number) {
     this.width.set(width);
     this.updateActiveBreakpoint(width);
+  }
+
+  registerSlideList(list: HTMLDivElement) {
+    this.carouselList.set(list)
   }
 
   registerSlides(slidesData: any[]) {
@@ -337,5 +350,13 @@ export class NgxCarouselService {
     return true
   }
 
-  
+
+  // getTranslateX(containreWidth: number) {
+  //   const current = this.currentSlide()
+  //   const space = this.space()
+  //   const slidesToShow = this.slidesToShow()
+  //   const slideWidht = (containreWidth - space * (slidesToShow - 1)) / slidesToShow
+
+  //   return current * (slideWidht + space)
+  // }
 }

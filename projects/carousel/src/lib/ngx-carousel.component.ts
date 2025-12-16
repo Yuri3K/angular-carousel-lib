@@ -33,7 +33,7 @@ export class NgxCarouselComponent implements AfterViewInit, OnChanges{
   
   ngAfterViewInit(): void {
     this.carousel.registerSlides(this.slides)
-    // this.carousel.registerSlideList(this.carouselList.nativeElement)
+    this.carousel.registerSlideList(this.carouselList.nativeElement)
     // this.carousel.registerRenderer(this.renderer)
     this.swipe.registerSlideList(this.carouselList)
     this.swipe.registerRenderer(this.renderer)
