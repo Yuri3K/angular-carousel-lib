@@ -3,6 +3,7 @@ import {
   Inject,
   Injectable,
   Optional,
+  Renderer2,
   signal,
 } from '@angular/core';
 import {
@@ -20,6 +21,9 @@ export class NgxCarouselService {
   private width = signal(0); // window width
   private snapTimer: any = null
   private carouselList = signal<HTMLDivElement | null>(null)
+  private resizeObserver?: ResizeObserver;
+  // private renderer!: Renderer2;
+  private carouselWidth = signal(0);
 
   isSnapping = false;
   isAnimating = signal(false)
@@ -31,9 +35,7 @@ export class NgxCarouselService {
   activeConfig = computed(() => this.config());
   slideWidthPx = computed(() =>
     // containreWidth - space * (slidesToShow - 1)) / slidesToShow
-    this.carouselList() ?
-      (this.carouselList()!.clientWidth / this.slidesToShow()) - this.space() / 2 :
-      0
+    (this.carouselWidth() / this.slidesToShow()) - this.space() / 2
   );
   slideStepPx = computed(() => this.slideWidthPx() + (this.config().spaceBetween ?? 0));
   translatePx = computed(() => `translateX(-${this.currentSlide() * this.slideStepPx()}px)`);
@@ -92,7 +94,20 @@ export class NgxCarouselService {
 
   registerSlideList(list: HTMLDivElement) {
     this.carouselList.set(list)
+
+    this.carouselWidth.set(list.clientWidth);
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const width = entries[0].contentRect.width;
+      this.carouselWidth.set(width);
+    });
+
+    this.resizeObserver.observe(list);
   }
+
+  // registerRenderer(renderer: Renderer2) {
+  //   this.renderer = renderer
+  // }
 
   registerSlides(slidesData: any[]) {
     this.slidesData.set(slidesData);

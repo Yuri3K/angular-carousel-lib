@@ -40,6 +40,8 @@ export class NgxSwipeService {
   }
 
   onPointerDown(event: PointerEvent) {
+    if (this.carousel.isAnimating()) return;
+    
     this.startX = event.clientX;
     this.currentX = 0;
     this.isSwipedEnough.set(false);
