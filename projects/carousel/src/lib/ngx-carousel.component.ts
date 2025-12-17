@@ -40,8 +40,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnChanges{
   ngOnInit() {
     this.carousel.init(this.config)
   }
-
-  
   
   ngAfterViewInit(): void {
 

@@ -1,5 +1,8 @@
 :host {
   --controls-top: 50%;
+  --carousel-container-height: auto;
+  --carousel-list-height: 100%;
+
 }
 
 .ngx-carousel {
@@ -7,18 +10,17 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  height: auto;
+  height: var(--carousel-container-height, auto);
 }
 
 .ngx-carousel__list {
   display: flex;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: var(--carousel-list-height, 100%);
   margin: 0;
   padding: 0;
   list-style: none;
-  // transition: transform 0.5s ease;
   user-select: none;
   touch-action: pan-y; // важно: разрешаем вертикальный скролл
   cursor: grab;

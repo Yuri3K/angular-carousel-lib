@@ -1,3 +1,12 @@
-lib-ngx-carousel {
+lib-ngx-carousel.main {
   --controls-top: 50%;
+  --carousel-container-height: 300px
+}
+
+lib-ngx-carousel.secondary {
+  --controls-top: 50%;
+  --carousel-container-height: 250px;
+  --carousel-list-height: calc(100% - 21px);
+
+  border-radius: 20px;
 }
