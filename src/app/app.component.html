@@ -1,6 +1,7 @@
 <lib-ngx-carousel 
   [slides]="slides"
   [windowWidth]="windowWidth"
+  [config]="configMain"
   >
   <ng-template #slideTemplate let-slide>
     <app-slide [slide]="slide" />
@@ -11,4 +12,24 @@
       [carousel]="carousel"
     />
   </ng-template> -->
+
+</lib-ngx-carousel>
+
+
+
+<lib-ngx-carousel 
+  [slides]="slides"
+  [windowWidth]="windowWidth"
+  [config]="configSeconfary"
+  >
+  <ng-template #slideTemplate let-slide>
+    <app-slide [slide]="slide" />
+  </ng-template>
+
+ <ng-template #controlsTemplate let-carousel>
+    <app-controls 
+      [carousel]="carousel"
+    />
+  </ng-template> 
+
 </lib-ngx-carousel>

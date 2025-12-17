@@ -9,9 +9,8 @@ import {
 import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxAutoplayService } from './ngx-autoplay..service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
+
 export class NgxSwipeService {
   // Порог в пикселях для различения клика и свайпа
   private readonly CLICK_LIMIT = 5; // px

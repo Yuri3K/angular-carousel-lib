@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import {
   DEFAULT_CAROUSEL_CONFIG,
-  NGX_CAROUSEL_CONFIG,
+  // NGX_CAROUSEL_CONFIG,
   NgxCarouselBreakpoint,
   NgxCarouselConfig,
 } from '../ngx-carousel.types';
@@ -60,16 +60,25 @@ export class NgxCarouselService {
   });
 
   constructor(
-    @Optional() @Inject(NGX_CAROUSEL_CONFIG) defaultCtf: NgxCarouselConfig
+    // @Optional() @Inject(NGX_CAROUSEL_CONFIG) defaultCtf: NgxCarouselConfig
   ) {
-    this.config.set({
-      ...DEFAULT_CAROUSEL_CONFIG,
-      ...(defaultCtf || {}),
-    });
+    // this.config.set({
+    //   ...DEFAULT_CAROUSEL_CONFIG,
+    //   ...(defaultCtf || {}),
+    // });
 
-    this.updateActiveBreakpoint(this.width());
+    // this.updateActiveBreakpoint(this.width());
 
     // console.log("WIDTH", this.width)
+  }
+
+  init(config: NgxCarouselConfig) {
+    this.config.set({
+      ...DEFAULT_CAROUSEL_CONFIG,
+      ...config ?? {}
+    })
+
+    this.updateActiveBreakpoint(this.width());
   }
 
   getConfig(): NgxCarouselConfig {
@@ -337,7 +346,7 @@ export class NgxCarouselService {
     return real;
   }
 
-  private startAnimation(): boolean {
+  startAnimation(): boolean {
     if (this.isAnimating()) return false
     this.isAnimating.set(true)
 

@@ -38,4 +38,4 @@ export const DEFAULT_CAROUSEL_CONFIG: NgxCarouselConfig = {
   breakpoints: [],     // по умолчанию нет брейкпоинтов
 }
 
-export const NGX_CAROUSEL_CONFIG = new InjectionToken<NgxCarouselConfig>('NGX_CAROUSEL_CONFIG')
+// export const NGX_CAROUSEL_CONFIG = new InjectionToken<NgxCarouselConfig>('NGX_CAROUSEL_CONFIG')
