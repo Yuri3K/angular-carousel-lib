@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterViewInit, Component, ContentChild, ElementRef, inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, inject, Input, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls/ngx-carousel-controls.component';
 import { NgxAutoplayService } from './services/ngx-autoplay..service';
 import { NgxSwipeService } from './services/ngx-swipe.service';
@@ -26,16 +26,16 @@ import { NgxCarouselNavigationService } from './services/ngx-carousel-navigation
   ]
 
 })
-export class NgxCarouselComponent implements OnInit, AfterViewInit, OnChanges{
+export class NgxCarouselComponent implements OnInit, AfterViewInit{
   @Input({required: true}) config!: NgxCarouselConfig
   @Input({required: true}) slides!: any[]
-  @Input({required: true}) windowWidth = 0
 
   @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', {static: true}) slideTemplate!: TemplateRef<any>
   @ContentChild('controlsTemplate', {static: true}) controlsTemplate!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2)
+  private resizeObserver!: ResizeObserver
 
   navigation = inject(NgxCarouselNavigationService)
   autoplay = inject(NgxAutoplayService)
@@ -46,16 +46,21 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnChanges{
   ngOnInit() {
     this.state.init(this.config)
     this.state.setSlides(this.slides)
+    this.watchResize()
   }
   
   ngAfterViewInit(): void {
     this.swipe.registerSlideList(this.carouselList)
     this.swipe.registerRenderer(this.renderer)
 
-    this.layout.setCarouselWidth(this.carouselList.nativeElement)
+    this.resizeObserver.observe(this.carouselList.nativeElement)
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.state.setWidth(changes['windowWidth'].currentValue)
+  private watchResize() {
+    this.resizeObserver = new ResizeObserver(entries => {
+      const width = entries[0].contentRect.width
+      this.layout.setCarouselWidth(width)
+      this.state.setWidth(width)
+    })
   }
 }

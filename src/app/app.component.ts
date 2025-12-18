@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SlideComponent } from './components/slide/slide.component';
 import { NgxCarouselComponent, NgxCarouselConfig } from 'carousel';
 import { ControlsComponent } from './components/controls/controls.component';
@@ -13,7 +13,7 @@ import { ControlsComponent } from './components/controls/controls.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   slides = [
     {
       "id": 0,
@@ -128,14 +128,4 @@ export class AppComponent implements OnInit {
     ]
   }
 
-  windowWidth = 0
-
-  @HostListener('window:resize')
-  onResize() {
-    this.windowWidth = window.innerWidth
-  }
-
-  ngOnInit() {
-    this.onResize()
-  }
 }

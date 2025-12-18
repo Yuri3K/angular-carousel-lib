@@ -11,15 +11,8 @@ export class NgxCarouselLayoutService {
 
   /* ========= MEASURE ========= */
 
-  setCarouselWidth(container: HTMLDivElement) {
-    this.carouselWidth.set(container.clientWidth)
-
-    const resizeObserver = new ResizeObserver(entries => {
-      const width = entries[0].contentRect.width
-      this.carouselWidth.set(width)
-    })
-
-    resizeObserver.observe(container)
+  setCarouselWidth(width: number) {
+    this.carouselWidth.set(width)
   }
 
   /* ========= GEOMETRY ========= */
