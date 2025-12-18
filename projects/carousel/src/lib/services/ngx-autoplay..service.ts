@@ -1,17 +1,19 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { NgxCarouselService } from './ngx-carousel.service';
+import { NgxCarouselStateService } from './ngx-carousel-state.service';
 
 @Injectable()
 
 export class NgxAutoplayService {
   private carousel = inject(NgxCarouselService)
+  private state = inject(NgxCarouselStateService)
   private isPlaying = signal(true)
-  private config = computed(() => this.carousel.getConfig());
+  private config = computed(() => this.state.getConfig());
   private timerAutoplay: any = null
 
   constructor() {
     effect(() => {
-      if(!this.config().autoplay || this.carousel.getSlidesLength() <= 1) {
+      if(!this.config().autoplay || this.state.getSlidesLength() <= 1) {
         this.stop()
         return
       }

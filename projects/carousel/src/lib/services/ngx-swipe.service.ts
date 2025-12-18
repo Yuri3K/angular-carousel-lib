@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxAutoplayService } from './ngx-autoplay..service';
+import { NgxCarouselStateService } from './ngx-carousel-state.service';
+import { NgxCarouselLayoutService } from './ngx-carousel-layout.service';
 
 @Injectable()
 export class NgxSwipeService {
@@ -16,6 +18,8 @@ export class NgxSwipeService {
   private readonly SWIPE_LIMIT = 0.05; // %
 
   private carousel = inject(NgxCarouselService);
+  private state = inject(NgxCarouselStateService)
+  private layout = inject(NgxCarouselLayoutService)
   private autoplay = inject(NgxAutoplayService);
 
   private renderer!: Renderer2;
@@ -23,7 +27,7 @@ export class NgxSwipeService {
   private startX = 0;
   private currentX = 0;
 
-  private config = computed(() => this.carousel.getConfig());
+  private config = computed(() => this.state.getConfig());
 
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.
@@ -56,7 +60,7 @@ export class NgxSwipeService {
   }
 
   onPointerMove(event: PointerEvent) {
-    if (this.carousel.getConfig().animation === 'fade') {
+    if (this.state.getConfig().animation === 'fade') {
       this.currentX = event.clientX - this.startX;
       return
     };
@@ -68,9 +72,9 @@ export class NgxSwipeService {
     // Если отключена бесконечная прокрутка, то останавливаем свайп
     // при достижении первого и последнего слайда
     if (!this.config().loop) {
-      const length = this.carousel.getSlidesLength();
-      const current = this.carousel.currentSlide();
-      const slidesToShow = this.carousel.slidesToShow();
+      const length = this.state.getSlidesLength();
+      const current = this.state.currentSlide();
+      const slidesToShow = this.state.slidesToShow();
 
       if (current <= 0 && this.currentX > 0) return; // свайпаем на предыдущий слайд, но это первый слайд
       if (current >= length - slidesToShow && this.currentX < 0) return; // свайпаем на следующий слайд, но это последний слайд
@@ -87,7 +91,7 @@ export class NgxSwipeService {
     }
 
     const baseTranslate =
-      -this.carousel.currentSlide() * this.carousel.slideStepPx();
+      -this.state.currentSlide() * this.layout.slideStepPx();
 
     const offsetPx = baseTranslate + this.currentX;
 
@@ -96,38 +100,10 @@ export class NgxSwipeService {
       'transform',
       `translateX(${offsetPx}px)`
     );
-
-    // const slidePercent = 100 / this.carousel.slidesToShow(); // %
-
-    // const baseOffset = -this.carousel.currentSlide() * slidePercent;
-
-    // const dragOffset =
-    //   (this.currentX / this.carouselList.nativeElement.clientWidth) * 100;
-
-    // const offset = baseOffset + dragOffset;
-
-    // this.renderer.setStyle(
-    //   this.carouselList.nativeElement,
-    //   'transform',
-    //   `translateX(${offset}%)`
-    // );
-
-    // СТАРАЯ ЛОГИКА НАПИСАННАЯ ПОД SLIDESTOSHOW = 1
-    // // Смещение в процентах (пользовательское + текущий слайд)
-    // const offset =
-    //   -(this.carousel.currentSlide() * 100) +
-    //   (this.currentX / this.carouselList.nativeElement.clientWidth) * 100;
-
-    // // Обновляем transform напрямую
-    // this.renderer.setStyle(
-    //   this.carouselList.nativeElement,
-    //   'transform',
-    //   `translateX(${offset}%)`
-    // );
   }
 
   onPointerUp(event: PointerEvent) {
-    if (this.carousel.getConfig().animation === 'fade') {
+    if (this.state.getConfig().animation === 'fade') {
       if (this.currentX < -50) this.carousel.next();
       else if (this.currentX > 50) this.carousel.prev();
       this.isSwiping.set(false);
@@ -140,20 +116,14 @@ export class NgxSwipeService {
     this.renderer.setStyle(
       this.carouselList.nativeElement,
       'transition',
-      `transform ${this.carousel.getConfig().speed}ms ease`
+      `transform ${this.state.getConfig().speed}ms ease`
     );
 
     const swipeDistance = this.currentX;
     const limit =
       this.carouselList.nativeElement.clientWidth * this.SWIPE_LIMIT;
 
-    // const slideWidth =
-    //   this.carouselList.nativeElement.clientWidth /
-    //   this.carousel.slidesToShow();
-
-    // const slidesDragged = Math.round(swipeDistance / slideWidth);
-
-    const step = this.carousel.slideStepPx();
+    const step = this.layout.slideStepPx();
     const slidesDragged = Math.round(swipeDistance / step);
     const delta = -slidesDragged;
 
@@ -174,21 +144,8 @@ export class NgxSwipeService {
     this.autoplay.resume();
   }
 
-  // private snapBack() {
-  //   console.log('🚀 ~ snapBack:');
-  //   // Просто устанавливаем transform в текущую позицию. Transition уже включен в onPointerUp.
-  //   this.renderer.setStyle(
-  //     this.carouselList.nativeElement,
-  //     'transform',
-  //     `translateX(-${this.carousel.currentSlide() * 100}%)`
-  //   );
-  // }
-
   private snapBack() {
-    // const step = 100 / this.carousel.slidesToShow();
-    // const offset = -this.carousel.currentSlide() * step;
-
-    const offset = -this.carousel.currentSlide() * this.carousel.slideStepPx();
+    const offset = -this.state.currentSlide() * this.layout.slideStepPx();
 
     // Просто устанавливаем transform в текущую позицию. Transition уже включен в onPointerUp.
     this.renderer.setStyle(

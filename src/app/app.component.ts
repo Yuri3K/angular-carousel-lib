@@ -111,7 +111,6 @@ export class AppComponent implements OnInit {
         showArrows: false,
         showDots: false,
         slidesToShow: 3,
-
       },
       {
         breakpoint: 768, // от 768

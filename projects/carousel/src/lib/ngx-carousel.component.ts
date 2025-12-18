@@ -5,6 +5,8 @@ import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls
 import { NgxAutoplayService } from './services/ngx-autoplay..service';
 import { NgxSwipeService } from './services/ngx-swipe.service';
 import { NgxCarouselConfig } from './ngx-carousel.types';
+import { NgxCarouselStateService } from './services/ngx-carousel-state.service';
+import { NgxCarouselLayoutService } from './services/ngx-carousel-layout.service';
 
 
 @Component({
@@ -18,7 +20,9 @@ import { NgxCarouselConfig } from './ngx-carousel.types';
   providers: [
     NgxCarouselService, 
     NgxAutoplayService, 
-    NgxSwipeService
+    NgxSwipeService,
+    NgxCarouselStateService,
+    NgxCarouselLayoutService
   ]
 
 })
@@ -36,23 +40,30 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnChanges{
   carousel = inject(NgxCarouselService)
   autoplay = inject(NgxAutoplayService)
   swipe = inject(NgxSwipeService)
+  layout = inject(NgxCarouselLayoutService)
+  state = inject(NgxCarouselStateService)
 
   ngOnInit() {
-    this.carousel.init(this.config)
+    // this.carousel.init(this.config)
+
+    this.state.init(this.config)
+    this.state.setSlides(this.slides)
   }
   
   ngAfterViewInit(): void {
-
-    this.carousel.registerSlides(this.slides)
-    this.carousel.registerSlideList(this.carouselList.nativeElement)
+    // this.carousel.registerSlides(this.slides)
+    // this.carousel.registerSlideList(this.carouselList.nativeElement)
     // this.carousel.registerRenderer(this.renderer)
     this.swipe.registerSlideList(this.carouselList)
     this.swipe.registerRenderer(this.renderer)
+    // this.carousel.setWidth(this.windowWidth)
 
-    this.carousel.setWidth(this.windowWidth)
+    this.layout.setCarouselWidth(this.carouselList.nativeElement)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.carousel.setWidth(changes['windowWidth'].currentValue)
+    // this.carousel.setWidth(changes['windowWidth'].currentValue)
+
+    this.state.setWidth(changes['windowWidth'].currentValue)
   }
 }

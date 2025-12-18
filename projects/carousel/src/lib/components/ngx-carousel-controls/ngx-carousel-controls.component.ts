@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { NgxCarouselService } from '../../services/ngx-carousel.service';
+import { NgxCarouselStateService } from '../../services/ngx-carousel-state.service';
 
 @Component({
   selector: 'lib-ngx-carousel-controls',
@@ -9,8 +10,9 @@ import { NgxCarouselService } from '../../services/ngx-carousel.service';
 })
 export class NgxCarouselControlsComponent {
   carousel = inject(NgxCarouselService)
+  state = inject(NgxCarouselStateService)
 
-  private config = this.carousel.activeConfig
+  private config = this.state.activeConfig
 
   isDots = computed(() => this.config().showDots)
 

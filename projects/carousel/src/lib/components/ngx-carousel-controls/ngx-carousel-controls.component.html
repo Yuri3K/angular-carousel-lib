@@ -20,7 +20,7 @@
     <div 
       class="ngx-carousel__dots"
     >
-      @for(dot of carousel.slidesData(); track $index; let i = $index) {
+      @for(dot of state.slides(); track $index; let i = $index) {
         <button
           class="ngx-carousel__dot"
           [class.active]="carousel.getDisplayIndex() == i"
