@@ -99,11 +99,12 @@ export class AppComponent implements OnInit {
     loop: true,
     startIndex: 0,
     pauseOnHover: true,
-    slidesToShow: 1,
+    slidesToShow: 3,
     showDots: true,
     showArrows: true,
-    speed: 1500,
+    speed: 500,
     spaceBetween: 50,
+    animation:'fade',
     breakpoints: [
       {
         breakpoint: 0, // до 768
@@ -116,13 +117,13 @@ export class AppComponent implements OnInit {
         breakpoint: 768, // от 768
         showArrows: true,
         showDots: true,
-        slidesToShow: 2,
+        slidesToShow: 3,
       },
       {
         breakpoint: 1024, // от 1024
         showArrows: true,
         showDots: false,
-        slidesToShow: 1,
+        slidesToShow: 3,
       },
 
     ]

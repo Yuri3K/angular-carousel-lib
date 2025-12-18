@@ -11,6 +11,7 @@
     #carouselList
     class="ngx-carousel__list"
     [class.no-transition]="carousel.disableTransition()"
+    [class.fade]="carousel.getConfig().animation === 'fade'"
     [style.transform]="carousel.translatePx()"
     [style.transition]="`transform ${carousel.getConfig().speed}ms ease`"
     (pointerdown)="swipe.onPointerDown($event)"
@@ -22,9 +23,9 @@
     @for(slideData of carousel.slidesWithClones(); track $index; let i = $index) {
       <li
         class="ngx-carousel__slide"
-        [class.active]="i === carousel.currentSlide() && carousel.slidesToShow() == 1"
-        [style.width.px]="carousel.slideWidthPx()"
-        [style.marginRight.px]="carousel.space()"
+        [class.active]="i === carousel.currentSlide()"
+        [style.width.px]="carousel.isFade() ? null : carousel.slideWidthPx()"
+        [style.marginRight.px]="carousel.isFade() ? null : carousel.space()"
       >
         <ng-container 
           [ngTemplateOutlet]="slideTemplate"

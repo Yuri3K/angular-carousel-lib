@@ -10,7 +10,6 @@ import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxAutoplayService } from './ngx-autoplay..service';
 
 @Injectable()
-
 export class NgxSwipeService {
   // Порог в пикселях для различения клика и свайпа
   private readonly CLICK_LIMIT = 5; // px
@@ -41,7 +40,7 @@ export class NgxSwipeService {
 
   onPointerDown(event: PointerEvent) {
     if (this.carousel.isAnimating()) return;
-    
+
     this.startX = event.clientX;
     this.currentX = 0;
     this.isSwipedEnough.set(false);
@@ -57,6 +56,11 @@ export class NgxSwipeService {
   }
 
   onPointerMove(event: PointerEvent) {
+    if (this.carousel.getConfig().animation === 'fade') {
+      this.currentX = event.clientX - this.startX;
+      return
+    };
+
     if (!this.isSwiping()) return;
 
     this.currentX = event.clientX - this.startX;
@@ -82,7 +86,8 @@ export class NgxSwipeService {
       this.carouselList.nativeElement.setPointerCapture(event.pointerId);
     }
 
-    const baseTranslate = -this.carousel.currentSlide() * this.carousel.slideStepPx();
+    const baseTranslate =
+      -this.carousel.currentSlide() * this.carousel.slideStepPx();
 
     const offsetPx = baseTranslate + this.currentX;
 
@@ -122,6 +127,13 @@ export class NgxSwipeService {
   }
 
   onPointerUp(event: PointerEvent) {
+    if (this.carousel.getConfig().animation === 'fade') {
+      if (this.currentX < -50) this.carousel.next();
+      else if (this.currentX > 50) this.carousel.prev();
+      this.isSwiping.set(false);
+      return;
+    }
+
     if (!this.isSwiping()) return;
 
     // 1. Включаем transition обратно, прежде чем менять currentSlide()
@@ -146,13 +158,9 @@ export class NgxSwipeService {
     const delta = -slidesDragged;
 
     if (swipeDistance < -limit) {
-      Math.abs(delta) > 0 ?
-        this.carousel.shiftBy(delta) :
-        this.carousel.next();
+      Math.abs(delta) > 0 ? this.carousel.shiftBy(delta) : this.carousel.next();
     } else if (swipeDistance > limit) {
-      Math.abs(delta) > 0 ?
-        this.carousel.shiftBy(delta) :
-        this.carousel.prev();
+      Math.abs(delta) > 0 ? this.carousel.shiftBy(delta) : this.carousel.prev();
     } else {
       if (Math.abs(swipeDistance) > this.CLICK_LIMIT) {
         this.snapBack();

@@ -19,28 +19,40 @@ import {
 export class NgxCarouselService {
   private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
   private width = signal(0); // window width
-  private snapTimer: any = null
-  private carouselList = signal<HTMLDivElement | null>(null)
+  private snapTimer: any = null;
+  private carouselList = signal<HTMLDivElement | null>(null);
   private resizeObserver?: ResizeObserver;
   // private renderer!: Renderer2;
   private carouselWidth = signal(0);
 
   isSnapping = false;
-  isAnimating = signal(false)
+  isAnimating = signal(false);
   slidesData = signal<any[]>([]);
   disableTransition = signal(false);
   currentSlide = signal(0);
   slidesToShow = computed(() => this.config().slidesToShow ?? 1);
   space = computed(() => this.config().spaceBetween ?? 0);
   activeConfig = computed(() => this.config());
-  slideWidthPx = computed(() =>
-    // containreWidth - space * (slidesToShow - 1)) / slidesToShow
-    (this.carouselWidth() / this.slidesToShow()) - this.space() / 2
+  slideWidthPx = computed(
+    () =>
+      // containreWidth - space * (slidesToShow - 1)) / slidesToShow
+      this.carouselWidth() / this.slidesToShow() - this.space() / 2
   );
-  slideStepPx = computed(() => this.slideWidthPx() + (this.config().spaceBetween ?? 0));
-  translatePx = computed(() => `translateX(-${this.currentSlide() * this.slideStepPx()}px)`);
+  slideStepPx = computed(
+    () => this.slideWidthPx() + (this.config().spaceBetween ?? 0)
+  );
+  translatePx = computed(() =>
+    this.isFade()
+      ? 'nonne'
+      : `translateX(-${this.currentSlide() * this.slideStepPx()}px)`
+  );
+  isFade = computed(() => this.config().animation === 'fade');
 
   slidesWithClones = computed(() => {
+    if (this.isFade()) {
+      return this.slidesData();
+    }
+
     const slides = this.slidesData();
     const length = slides.length;
     const slidesToShow = this.slidesToShow();
@@ -61,24 +73,21 @@ export class NgxCarouselService {
     return slides;
   });
 
-  constructor(
+  constructor() {
     // @Optional() @Inject(NGX_CAROUSEL_CONFIG) defaultCtf: NgxCarouselConfig
-  ) {
     // this.config.set({
     //   ...DEFAULT_CAROUSEL_CONFIG,
     //   ...(defaultCtf || {}),
     // });
-
     // this.updateActiveBreakpoint(this.width());
-
     // console.log("WIDTH", this.width)
   }
 
   init(config: NgxCarouselConfig) {
     this.config.set({
       ...DEFAULT_CAROUSEL_CONFIG,
-      ...config ?? {}
-    })
+      ...(config ?? {}),
+    });
 
     this.updateActiveBreakpoint(this.width());
   }
@@ -93,7 +102,7 @@ export class NgxCarouselService {
   }
 
   registerSlideList(list: HTMLDivElement) {
-    this.carouselList.set(list)
+    this.carouselList.set(list);
 
     this.carouselWidth.set(list.clientWidth);
 
@@ -140,10 +149,16 @@ export class NgxCarouselService {
   }
 
   next() {
-    if (!this.startAnimation()) return
+    if (!this.startAnimation()) return;
 
     const length = this.slidesWithClones().length;
     if (length <= 1) return;
+
+    if (this.isFade()) {
+      const next = (this.currentSlide() + 1) % length;
+      this.currentSlide.set(next);
+      return;
+    }
 
     this.disableTransition.set(false);
     const current = this.currentSlide();
@@ -156,7 +171,7 @@ export class NgxCarouselService {
       // Если достигли клона
       if (current + slidesToShow >= length - 1) {
         // Сбрасываем на первый оригинальный слайд
-        const index = this.getRealIndex(current + 1)
+        const index = this.getRealIndex(current + 1);
         this.scheduleSnapToRealIndex(index);
       }
     } else if (current + 1 < length) {
@@ -166,10 +181,16 @@ export class NgxCarouselService {
   }
 
   prev() {
-    if (!this.startAnimation()) return
+    if (!this.startAnimation()) return;
 
     const length = this.slidesWithClones().length;
     if (length <= 1) return;
+
+    if (this.isFade()) {
+      const prev = (this.currentSlide() - 1 + length) % length;
+      this.currentSlide.set(prev);
+      return;
+    }
 
     this.disableTransition.set(false);
     const current = this.currentSlide();
@@ -180,7 +201,7 @@ export class NgxCarouselService {
       this.currentSlide.set(current - 1);
 
       if (current - slidesToShow <= 0) {
-        const index = this.getRealIndex(current - 1)
+        const index = this.getRealIndex(current - 1);
         this.scheduleSnapToRealIndex(index);
       }
     } else if (current > 0) {
@@ -228,10 +249,10 @@ export class NgxCarouselService {
   private scheduleSnapToRealIndex(realIndex: number) {
     if (this.isSnapping) {
       if (this.snapTimer) {
-        clearTimeout(this.snapTimer)
+        clearTimeout(this.snapTimer);
       }
-      this.snapTimer = null
-    };
+      this.snapTimer = null;
+    }
 
     this.isSnapping = true;
     const slidesToShow = this.slidesToShow();
@@ -246,9 +267,9 @@ export class NgxCarouselService {
           this.disableTransition.set(false);
           this.isSnapping = false;
           if (this.snapTimer) {
-            clearTimeout(this.snapTimer)
+            clearTimeout(this.snapTimer);
           }
-          this.snapTimer = null
+          this.snapTimer = null;
         });
       });
     }, this.config().speed);
@@ -318,7 +339,7 @@ export class NgxCarouselService {
 
   shiftBy(delta: number) {
     if (delta === 0) return;
-    if (!this.startAnimation()) return
+    if (!this.startAnimation()) return;
 
     const current = this.currentSlide();
     const slidesToShow = this.slidesToShow();
@@ -362,18 +383,17 @@ export class NgxCarouselService {
   }
 
   startAnimation(): boolean {
-    if (this.isAnimating()) return false
-    this.isAnimating.set(true)
+    if (this.isAnimating()) return false;
+    this.isAnimating.set(true);
 
-    const duration = this.config().speed ?? 500
+    const duration = this.config().speed ?? 500;
 
     setTimeout(() => {
-      this.isAnimating.set(false)
+      this.isAnimating.set(false);
     }, duration);
 
-    return true
+    return true;
   }
-
 
   // getTranslateX(containreWidth: number) {
   //   const current = this.currentSlide()

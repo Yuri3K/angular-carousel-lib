@@ -2,10 +2,6 @@ import { InjectionToken } from "@angular/core"
 
 export interface NgxCarouselBreakpoint extends NgxCarouselConfig {
   breakpoint: number, // Ширина экрана, при которой применяется конфигурация (max-width)
-  // slidesToShow: number // Количество слайдов для отображения на этом брейкпоинте
-  // showArrows?: boolean; // Показывать стрелки
-  // showDots?: boolean; // Показывать точки
-  // spaceBetween?: number; // Отступ между слайдами в px
 }
 
 export interface NgxCarouselConfig {
