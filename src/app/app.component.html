@@ -1,21 +1,23 @@
 <br>
-<lib-ngx-carousel 
-  class="main"
-  [slides]="slides"
-  [windowWidth]="windowWidth"
-  [config]="configMain"
-  >
-  <ng-template #slideTemplate let-slide>
-    <app-slide [slide]="slide" />
-  </ng-template>
-
-  <!-- <ng-template #controlsTemplate let-carousel>
-    <app-controls 
-      [carousel]="carousel"
-    />
-  </ng-template> -->
-
-</lib-ngx-carousel>
+<div class="lib-wrapper">
+  <lib-ngx-carousel 
+    class="main"
+    [slides]="slides"
+    [windowWidth]="windowWidth"
+    [config]="configMain"
+    >
+    <ng-template #slideTemplate let-slide>
+      <app-slide [slide]="slide" />
+    </ng-template>
+  
+    <!-- <ng-template #controlsTemplate let-carousel>
+      <app-controls 
+        [carousel]="carousel"
+      />
+    </ng-template> -->
+  
+  </lib-ngx-carousel>
+</div>
 
 <br>
 <hr>
