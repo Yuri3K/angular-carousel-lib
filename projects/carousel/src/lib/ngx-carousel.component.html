@@ -1,7 +1,7 @@
 <div
   class="ngx-carousel"
-  (keydown.arrowRight)="carousel.next()"
-  (keydown.arrowLeft)="carousel.prev()"
+  (keydown.arrowRight)="navigation.next()"
+  (keydown.arrowLeft)="navigation.prev()"
   (mouseleave)="autoplay.resume()"
   (mouseover)="autoplay.pause()"
   (focusin)="autoplay.pause()"
@@ -10,7 +10,7 @@
   <ul
     #carouselList
     class="ngx-carousel__list"
-    [class.no-transition]="carousel.disableTransition()"
+    [class.no-transition]="navigation.disableTransition()"
     [class.fade]="state.isFade()"
     [style.transform]="layout.translatePx()"
     [style.transition]="`transform ${state.getConfig().speed}ms ease`"
@@ -38,7 +38,7 @@
   @if(controlsTemplate) {
     <ng-container 
       [ngTemplateOutlet]="controlsTemplate"
-      [ngTemplateOutletContext]="{$implicit: carousel}"
+      [ngTemplateOutletContext]="{$implicit: navigation}"
     />
   } @else {
     <lib-ngx-carousel-controls />

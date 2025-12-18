@@ -1,6 +1,6 @@
-import { Component, computed, effect, inject } from '@angular/core';
-import { NgxCarouselService } from '../../services/ngx-carousel.service';
+import { Component, computed, inject } from '@angular/core';
 import { NgxCarouselStateService } from '../../services/ngx-carousel-state.service';
+import { NgxCarouselNavigationService } from '../../services/ngx-carousel-navigation.service';
 
 @Component({
   selector: 'lib-ngx-carousel-controls',
@@ -9,7 +9,7 @@ import { NgxCarouselStateService } from '../../services/ngx-carousel-state.servi
   styleUrl: './ngx-carousel-controls.component.scss',
 })
 export class NgxCarouselControlsComponent {
-  carousel = inject(NgxCarouselService)
+  navigation = inject(NgxCarouselNavigationService)
   state = inject(NgxCarouselStateService)
 
   private config = this.state.activeConfig

@@ -1,11 +1,11 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxCarouselStateService } from './ngx-carousel-state.service';
+import { NgxCarouselNavigationService } from './ngx-carousel-navigation.service';
 
 @Injectable()
 
 export class NgxAutoplayService {
-  private carousel = inject(NgxCarouselService)
+  private navigation = inject(NgxCarouselNavigationService)
   private state = inject(NgxCarouselStateService)
   private isPlaying = signal(true)
   private config = computed(() => this.state.getConfig());
@@ -30,7 +30,7 @@ export class NgxAutoplayService {
     
     this.stop()
     const delay  = this.config().interval ?? 5000
-    this.timerAutoplay = setInterval(() => this.carousel.next(), delay )
+    this.timerAutoplay = setInterval(() => this.navigation.next(), delay )
   }
 
   stop() {

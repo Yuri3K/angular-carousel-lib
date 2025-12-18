@@ -6,10 +6,10 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxAutoplayService } from './ngx-autoplay..service';
 import { NgxCarouselStateService } from './ngx-carousel-state.service';
 import { NgxCarouselLayoutService } from './ngx-carousel-layout.service';
+import { NgxCarouselNavigationService } from './ngx-carousel-navigation.service';
 
 @Injectable()
 export class NgxSwipeService {
@@ -17,7 +17,7 @@ export class NgxSwipeService {
   private readonly CLICK_LIMIT = 5; // px
   private readonly SWIPE_LIMIT = 0.05; // %
 
-  private carousel = inject(NgxCarouselService);
+  private navigation = inject(NgxCarouselNavigationService);
   private state = inject(NgxCarouselStateService)
   private layout = inject(NgxCarouselLayoutService)
   private autoplay = inject(NgxAutoplayService);
@@ -43,7 +43,7 @@ export class NgxSwipeService {
   }
 
   onPointerDown(event: PointerEvent) {
-    if (this.carousel.isAnimating()) return;
+    if (this.navigation.isAnimating()) return;
 
     this.startX = event.clientX;
     this.currentX = 0;
@@ -104,8 +104,8 @@ export class NgxSwipeService {
 
   onPointerUp(event: PointerEvent) {
     if (this.state.getConfig().animation === 'fade') {
-      if (this.currentX < -50) this.carousel.next();
-      else if (this.currentX > 50) this.carousel.prev();
+      if (this.currentX < -50) this.navigation.next();
+      else if (this.currentX > 50) this.navigation.prev();
       this.isSwiping.set(false);
       return;
     }
@@ -128,9 +128,9 @@ export class NgxSwipeService {
     const delta = -slidesDragged;
 
     if (swipeDistance < -limit) {
-      Math.abs(delta) > 0 ? this.carousel.shiftBy(delta) : this.carousel.next();
+      Math.abs(delta) > 0 ? this.navigation.shiftBy(delta) : this.navigation.next();
     } else if (swipeDistance > limit) {
-      Math.abs(delta) > 0 ? this.carousel.shiftBy(delta) : this.carousel.prev();
+      Math.abs(delta) > 0 ? this.navigation.shiftBy(delta) : this.navigation.prev();
     } else {
       if (Math.abs(swipeDistance) > this.CLICK_LIMIT) {
         this.snapBack();

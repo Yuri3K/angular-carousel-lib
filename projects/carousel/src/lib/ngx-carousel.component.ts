@@ -1,12 +1,12 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, Component, ContentChild, ElementRef, inject, Input, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
-import { NgxCarouselService } from './services/ngx-carousel.service';
 import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls/ngx-carousel-controls.component';
 import { NgxAutoplayService } from './services/ngx-autoplay..service';
 import { NgxSwipeService } from './services/ngx-swipe.service';
 import { NgxCarouselConfig } from './ngx-carousel.types';
 import { NgxCarouselStateService } from './services/ngx-carousel-state.service';
 import { NgxCarouselLayoutService } from './services/ngx-carousel-layout.service';
+import { NgxCarouselNavigationService } from './services/ngx-carousel-navigation.service';
 
 
 @Component({
@@ -18,7 +18,7 @@ import { NgxCarouselLayoutService } from './services/ngx-carousel-layout.service
   templateUrl: './ngx-carousel.component.html',
   styleUrl: './ngx-carousel.component.scss',
   providers: [
-    NgxCarouselService, 
+    NgxCarouselNavigationService, 
     NgxAutoplayService, 
     NgxSwipeService,
     NgxCarouselStateService,
@@ -37,33 +37,25 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnChanges{
 
   private readonly renderer = inject(Renderer2)
 
-  carousel = inject(NgxCarouselService)
+  navigation = inject(NgxCarouselNavigationService)
   autoplay = inject(NgxAutoplayService)
   swipe = inject(NgxSwipeService)
   layout = inject(NgxCarouselLayoutService)
   state = inject(NgxCarouselStateService)
 
   ngOnInit() {
-    // this.carousel.init(this.config)
-
     this.state.init(this.config)
     this.state.setSlides(this.slides)
   }
   
   ngAfterViewInit(): void {
-    // this.carousel.registerSlides(this.slides)
-    // this.carousel.registerSlideList(this.carouselList.nativeElement)
-    // this.carousel.registerRenderer(this.renderer)
     this.swipe.registerSlideList(this.carouselList)
     this.swipe.registerRenderer(this.renderer)
-    // this.carousel.setWidth(this.windowWidth)
 
     this.layout.setCarouselWidth(this.carouselList.nativeElement)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // this.carousel.setWidth(changes['windowWidth'].currentValue)
-
     this.state.setWidth(changes['windowWidth'].currentValue)
   }
 }

@@ -1,24 +1,15 @@
 import {
-  computed,
   inject,
-  Inject,
   Injectable,
-  Optional,
-  Renderer2,
   signal,
 } from '@angular/core';
-import {
-  DEFAULT_CAROUSEL_CONFIG,
-  NgxCarouselBreakpoint,
-  NgxCarouselConfig,
-} from '../ngx-carousel.types';
 import { NgxCarouselStateService } from './ngx-carousel-state.service';
 import { NgxCarouselLayoutService } from './ngx-carousel-layout.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NgxCarouselService {
+export class NgxCarouselNavigationService {
   private snapTimer: any = null;
 
   state = inject(NgxCarouselStateService)

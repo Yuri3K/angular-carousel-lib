@@ -2,13 +2,13 @@
 @if(isArrows()) {
   <div class="ngx-carousel__controls">
     <button
-      (click)="carousel.prev()"
+      (click)="navigation.prev()"
     >
     Prev
     </button>
   
     <button
-      (click)="carousel.next()"
+      (click)="navigation.next()"
     >
     Next
     </button>
@@ -23,8 +23,8 @@
       @for(dot of state.slides(); track $index; let i = $index) {
         <button
           class="ngx-carousel__dot"
-          [class.active]="carousel.getDisplayIndex() == i"
-          (click)="carousel.goTo(i)"
+          [class.active]="navigation.getDisplayIndex() == i"
+          (click)="navigation.goTo(i)"
         ></button>
       }
     </div>
