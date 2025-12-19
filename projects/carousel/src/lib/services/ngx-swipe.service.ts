@@ -27,7 +27,7 @@ export class NgxSwipeService {
   private startX = 0;
   private currentX = 0;
 
-  private config = computed(() => this.state.getConfig());
+  private config = computed(() => this.state.activeConfig());
 
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.
@@ -60,7 +60,7 @@ export class NgxSwipeService {
   }
 
   onPointerMove(event: PointerEvent) {
-    if (this.state.getConfig().animation === 'fade') {
+    if (this.state.activeConfig().animation === 'fade') {
       this.currentX = event.clientX - this.startX;
       return
     };
@@ -103,7 +103,7 @@ export class NgxSwipeService {
   }
 
   onPointerUp(event: PointerEvent) {
-    if (this.state.getConfig().animation === 'fade') {
+    if (this.state.activeConfig().animation === 'fade') {
       if (this.currentX < -50) this.navigation.next();
       else if (this.currentX > 50) this.navigation.prev();
       this.isSwiping.set(false);
@@ -116,7 +116,7 @@ export class NgxSwipeService {
     this.renderer.setStyle(
       this.carouselList.nativeElement,
       'transition',
-      `transform ${this.state.getConfig().speed}ms ease`
+      `transform ${this.state.activeConfig().speed}ms ease`
     );
 
     const swipeDistance = this.currentX;

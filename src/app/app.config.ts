@@ -3,14 +3,14 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
-// import { NGX_CAROUSEL_CONFIG } from 'carousel';
+// import { NGX_CAROUSELconfig } from 'carousel';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
     provideAnimations(),
     // {
-    //   provide: NGX_CAROUSEL_CONFIG,
+    //   provide: NGX_CAROUSELconfig,
     //   useValue: {
     //     autoplay: false,
     //     interval: 1000,

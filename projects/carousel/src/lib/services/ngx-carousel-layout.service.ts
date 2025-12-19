@@ -28,24 +28,4 @@ export class NgxCarouselLayoutService {
     if (this.state.isFade()) return 'none';
     return `translate(-${this.state.currentSlide() * this.slideStepPx()}px)`;
   });
-
-  /* ========= CLONES ========= */
-  slidesWithClones = computed(() => {
-    if (this.state.isFade()) {
-      return this.state.slides();
-    }
-
-    const slides = this.state.slides();
-    const count = this.state.slidesToShow();
-
-    if (!this.state.getConfig().loop && slides.length < count) {
-      return slides;
-    }
-
-    return [
-      ...slides.slice(-count),
-      ...slides,
-      ...slides.slice(0, count),
-    ];
-  });
 }

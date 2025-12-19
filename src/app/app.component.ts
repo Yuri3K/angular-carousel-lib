@@ -74,14 +74,14 @@ export class AppComponent {
         breakpoint: 0, // до 768
         showArrows: true,
         showDots: true,
-        slidesToShow: 3,
+        slidesToShow: 1,
 
       },
       {
         breakpoint: 768, // от 768
         showArrows: true,
         showDots: true,
-        slidesToShow: 3,
+        slidesToShow: 2,
       },
       {
         breakpoint: 1024, // от 1024

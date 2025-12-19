@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import {
   DEFAULT_CAROUSEL_CONFIG,
   NgxCarouselConfig,
@@ -7,8 +7,8 @@ import {
 @Injectable()
 export class NgxCarouselStateService {
   /* ========= BASE STATE ========= */
-  private _config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
-  private _width = signal(0);
+  private config = signal<NgxCarouselConfig>({});
+  private width = signal(0);
 
   slides = signal<any[]>([]);
   currentSlide = signal(0);
@@ -16,35 +16,42 @@ export class NgxCarouselStateService {
   disableTransition = signal(false);
 
   /* ========= DERIVED ========= */
-  slidesToShow = computed(() => this._config().slidesToShow ?? 1);
-  space = computed(() => this._config().spaceBetween ?? 0);
-  isFade = computed(() => this._config().animation === 'fade');
+  slidesToShow = computed(() => this.activeConfig().slidesToShow ?? 1);
+  space = computed(() => this.activeConfig().spaceBetween ?? 0);
+  isFade = computed(() => this.activeConfig().animation === 'fade');
+  loop = computed(() => this.activeConfig().loop)
 
-  activeConfig = computed(() => this._config());
+  activeConfig = computed<NgxCarouselConfig>(() => ({
+    ...DEFAULT_CAROUSEL_CONFIG,
+    ...this.config(),
+    ...(this.activeBreakpoint() ?? {}),
+  }));
+
+  constructor() {
+    effect(() => {
+      const slides = this.slides()
+      const cfg = this.activeConfig()
+      if (!slides.length) return
+
+      const index = cfg.loop
+        ? (cfg.startIndex ?? 0) + this.slidesToShow()
+        : cfg.startIndex ?? 0;
+
+      this.currentSlide.set(index);
+    })
+  }
 
   /* ========= INIT ========= */
   init(config: NgxCarouselConfig) {
-    this._config.set({
-      ...DEFAULT_CAROUSEL_CONFIG,
-      ...(config ?? {}),
-    });
-
-    this.updateBreakpoint(this._width());
+    this.config.set(config ?? {})
   }
 
   setWidth(width: number) {
-    this._width.set(width);
-    this.updateBreakpoint(width);
+    this.width.set(width);
   }
 
   setSlides(slides: any[]) {
     this.slides.set(slides);
-
-    const index = this._config().loop
-      ? (this._config().startIndex ?? 0) + this.slidesToShow()
-      : this._config().startIndex ?? 0;
-
-    this.currentSlide.set(index);
   }
 
   setCurrentSlide(index: number) {
@@ -55,21 +62,33 @@ export class NgxCarouselStateService {
     return this.slides().length;
   }
 
-  /* ========= BREAKPOINTS ========= */
-  private updateBreakpoint(width: number) {
-    const breakpoints = this._config().breakpoints ?? [];
-
-    const active = [...breakpoints]
-      .sort((a, b) => b.breakpoint - a.breakpoint)
-      .find((bp) => width >= bp.breakpoint);
-
-    if (active) {
-      this._config.update((cfg) => ({ ...cfg, ...active }));
+  /* ========= CLONES ========= */
+  slidesWithClones = computed(() => {
+    if (this.isFade()) {
+      return this.slides();
     }
-  }
 
-  /* ========= READ ========= */
-  getConfig() {
-    return this._config();
-  }
+    const slides = this.slides();
+    const count = this.slidesToShow();
+
+    if (!this.loop() && slides.length < count) {
+      return slides;
+    }
+
+    return [
+      ...slides.slice(-count),
+      ...slides,
+      ...slides.slice(0, count),
+    ];
+  });
+
+  /* ========= BREAKPOINTS ========= */
+  private activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {
+    const breakpoints = this.config().breakpoints ?? [];
+    const w = this.width();
+
+    return [...breakpoints]
+      .sort((a, b) => b.breakpoint - a.breakpoint)
+      .find(bp => w >= bp.breakpoint) ?? null;
+  });
 }

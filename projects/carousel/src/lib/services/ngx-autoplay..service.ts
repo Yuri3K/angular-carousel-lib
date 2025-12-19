@@ -8,7 +8,7 @@ export class NgxAutoplayService {
   private navigation = inject(NgxCarouselNavigationService)
   private state = inject(NgxCarouselStateService)
   private isPlaying = signal(true)
-  private config = computed(() => this.state.getConfig());
+  private config = computed(() => this.state.activeConfig());
   private timerAutoplay: any = null
 
   constructor() {

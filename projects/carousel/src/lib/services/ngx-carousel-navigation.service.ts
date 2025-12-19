@@ -22,7 +22,7 @@ export class NgxCarouselNavigationService {
   next() {
     if (!this.startAnimation()) return;
 
-    const length = this.layout.slidesWithClones().length;
+    const length = this.state.slidesWithClones().length;
     if (length <= 1) return;
 
     if (this.state.isFade()) {
@@ -35,7 +35,7 @@ export class NgxCarouselNavigationService {
     const current = this.state.currentSlide();
     const slidesToShow = this.state.slidesToShow();
 
-    if (this.state.getConfig().loop) {
+    if (this.state.activeConfig().loop) {
       // Переходим к следующему слайду (даже если это клон)
       this.state.setCurrentSlide(current + 1);
 
@@ -54,7 +54,7 @@ export class NgxCarouselNavigationService {
   prev() {
     if (!this.startAnimation()) return;
 
-    const length = this.layout.slidesWithClones().length;
+    const length = this.state.slidesWithClones().length;
     if (length <= 1) return;
 
     if (this.state.isFade()) {
@@ -67,7 +67,7 @@ export class NgxCarouselNavigationService {
     const current = this.state.currentSlide();
     const slidesToShow = this.state.slidesToShow();
 
-    if (this.state.getConfig().loop) {
+    if (this.state.activeConfig().loop) {
       // Переходим к предыдущему слайду (даже если это клон)
       this.state.setCurrentSlide(current - 1);
 
@@ -106,7 +106,7 @@ export class NgxCarouselNavigationService {
           this.snapTimer = null;
         });
       });
-    }, this.state.getConfig().speed);
+    }, this.state.activeConfig().speed);
   }
 
   goTo(index: number) {
@@ -115,7 +115,7 @@ export class NgxCarouselNavigationService {
 
     const slidestToShow = this.state.slidesToShow();
 
-    if (this.state.getConfig().loop) {
+    if (this.state.activeConfig().loop) {
       // В режиме loop просто устанавливаем целевой индекс
       this.state.setCurrentSlide(index + slidestToShow);
     } else {
@@ -124,14 +124,14 @@ export class NgxCarouselNavigationService {
   }
 
   getDisplayIndex(): number {
-    const length = this.layout.slidesWithClones().length;
+    const length = this.state.slidesWithClones().length;
     if (length <= 0) return 0;
 
     const current = this.state.currentSlide();
     const slidesToShow = this.state.slidesToShow();
 
     // Если loop отключен, то просто вернем индекс текущего слайда
-    if (!this.state.getConfig().loop) return current;
+    if (!this.state.activeConfig().loop) return current;
 
     // Если на клоне последнего (индекс 0), показываем последний реальный
     if (current === 0) return length - 1;
@@ -149,13 +149,13 @@ export class NgxCarouselNavigationService {
 
     const current = this.state.currentSlide();
     const slidesToShow = this.state.slidesToShow();
-    const total = this.layout.slidesWithClones().length;
+    const total = this.state.slidesWithClones().length;
 
     let target = current + delta;
 
     this.disableTransition.set(false);
 
-    if (!this.state.getConfig().loop) {
+    if (!this.state.activeConfig().loop) {
       const max = total - slidesToShow;
       target = Math.max(0, Math.min(target, max));
       this.state.setCurrentSlide(target);
@@ -177,7 +177,7 @@ export class NgxCarouselNavigationService {
     const length = this.state.getSlidesLength();
     const slidesToShow = this.state.slidesToShow();
 
-    if (!this.state.getConfig().loop) return virtualIndex;
+    if (!this.state.activeConfig().loop) return virtualIndex;
 
     // виртуальный индекс → реальный
     let real = virtualIndex - slidesToShow;
@@ -192,7 +192,7 @@ export class NgxCarouselNavigationService {
     if (this.isAnimating()) return false;
     this.isAnimating.set(true);
 
-    const duration = this.state.getConfig().speed ?? 500;
+    const duration = this.state.activeConfig().speed ?? 500;
 
     setTimeout(() => {
       this.isAnimating.set(false);

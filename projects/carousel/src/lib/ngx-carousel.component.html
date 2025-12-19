@@ -13,14 +13,14 @@
     [class.no-transition]="navigation.disableTransition()"
     [class.fade]="state.isFade()"
     [style.transform]="layout.translatePx()"
-    [style.transition]="`transform ${state.getConfig().speed}ms ease`"
+    [style.transition]="`transform ${state.activeConfig().speed}ms ease`"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"
     (pointercancel)="swipe.onPointerUp($event)"
     (pointerleave)="swipe.onPointerUp($event)"
   >
-    @for(slideData of layout.slidesWithClones(); track $index; let i = $index) {
+    @for(slideData of state.slidesWithClones(); track $index; let i = $index) {
       <li
         class="ngx-carousel__slide"
         [class.active]="i === state.currentSlide()"
