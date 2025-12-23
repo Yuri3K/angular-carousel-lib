@@ -1,9 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { NgxCarouselService } from './ngx-carousel.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NgxAutoplayService {
   private carousel = inject(NgxCarouselService)
   private isPlaying = signal(true)
