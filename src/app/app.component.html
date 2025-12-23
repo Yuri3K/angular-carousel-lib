@@ -1,6 +1,9 @@
 
 <div class="carousel-wrapper" style="max-width: 500px;">
-  <lib-ngx-carousel [slides]="slides">
+  <lib-ngx-carousel 
+    [slides]="slides"
+    [config]="customConfig"
+  >
     <ng-template #slideTemplate let-slide>
       <app-slide [slide]="slide" />
     </ng-template>

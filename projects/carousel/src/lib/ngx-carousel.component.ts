@@ -16,6 +16,7 @@ import { NgxCarouselControlsComponent } from './components/ngx-carousel-controls
 import { NgxAutoplayService } from './services/ngx-autoplay..service';
 import { NgxSwipeService } from './services/ngx-swipe.service';
 import { NgxStateService } from './services/ngx-state.service';
+import { NgxCarouselConfig } from './ngx-carousel.types';
 
 @Component({
   selector: 'lib-ngx-carousel',
@@ -31,6 +32,8 @@ import { NgxStateService } from './services/ngx-state.service';
 })
 export class NgxCarouselComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) slides!: any[];
+  @Input() config!: NgxCarouselConfig;
+
   @ViewChild('carouselList', { static: true })
   carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', { static: true })
@@ -46,6 +49,7 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.watchResize();
+    this.state.init(this.config)
   }
 
   ngAfterViewInit(): void {

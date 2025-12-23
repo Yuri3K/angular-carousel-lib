@@ -1,46 +1,39 @@
-import { computed, effect, inject, Inject, Injectable, Optional, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { DEFAULT_CAROUSEL_CONFIG, NGX_CAROUSEL_CONFIG, NgxCarouselConfig } from '../ngx-carousel.types';
 
 @Injectable()
 export class NgxStateService {
   private config = signal<NgxCarouselConfig>({});
-  private appCfg = inject(NGX_CAROUSEL_CONFIG, { optional: true });
   private width = signal(0)
-
-  // activeConfig = computed(() => {
-  //   return {
-  //     ...DEFAULT_CAROUSEL_CONFIG,
-  //     ...this.config ?? {},
-  //     ...this.activeBreakpoint() ?? {}
-  //   }
-  // })
-
-  //   /* ========= BREAKPOINTS ========= */
-  // private activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {
-  //   const breakpoints = this.config().breakpoints ?? [];
-  //   const w = this.width();
-
-  //   return [...breakpoints]
-  //     .sort((a, b) => b.breakpoint - a.breakpoint)
-  //     .find(bp => w >= bp.breakpoint) ?? null;
-  // });
+  
+  private appCfg = inject(NGX_CAROUSEL_CONFIG, { optional: true });
+  activeConfig = computed(() => {
+    return {
+      ...this.config ?? {},
+      ...this.activeBreakpoint() ?? {}
+    }
+  })
 
   /* ========= BREAKPOINTS ========= */
   activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {
-    const breakpoints = this.config().breakpoints
+    const breakpoints = this.config().breakpoints ?? []
     const w = this.width();
 
-    return null
+    return[...breakpoints]
+      .sort((a, b) => b.breakpoint - a.breakpoint)
+      .find(bp => w >= bp.breakpoint) ?? null
   })  
 
   constructor() {}
 
   /* ========= INIT ========= */
-  init(customConfig: NgxCarouselConfig) {
+  init(customConfig: NgxCarouselConfig = {}) {
     this.config.set({
+      ...DEFAULT_CAROUSEL_CONFIG,
       ...this.appCfg ?? {},
       ...customConfig ?? {}
     });
+    console.log("🔸 this.config:", this.config())
   }
 
   setWidth(width: number) {
