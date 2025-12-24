@@ -25,6 +25,8 @@ export class NgxStateService {
   space = computed(() => this.activeConfig().spaceBetween ?? 0);
   isFade = computed(() => this.activeConfig().animation === 'fade');
   loop = computed(() => this.activeConfig().loop)
+  isArrows = computed(() => this.activeConfig().showArrows)
+  isDots = computed(() => this.activeConfig().showDots)
 
   /* ========= BREAKPOINTS ========= */
   activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {
@@ -83,6 +85,7 @@ export class NgxStateService {
 
   setWidth(width: number) {
     this.width.set(width)
+    // console.log("ACTIVE", this.activeConfig())
   }
 
   setSlides(slides: any[]) {

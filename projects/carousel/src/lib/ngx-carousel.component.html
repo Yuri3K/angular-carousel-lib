@@ -11,7 +11,9 @@
     #carouselList
     class="ngx-carousel__list"
     [class.no-transition]="carousel.disableTransition()"
-    [style.transform]="'translateX(-' + state.currentSlide() * 100 + '%)'"
+    [style.transform]="'translateX(-' + 
+      state.currentSlide() * 100 + 
+      '%)'"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"
