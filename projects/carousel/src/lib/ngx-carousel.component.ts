@@ -50,6 +50,7 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.watchResize();
     this.state.init(this.config)
+    this.state.setSlides(this.slides)
   }
 
   ngAfterViewInit(): void {
