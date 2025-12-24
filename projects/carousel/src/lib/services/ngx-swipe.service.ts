@@ -1,6 +1,7 @@
-import { computed, ElementRef, inject, Injectable, Renderer2, signal } from '@angular/core';
+import { ElementRef, inject, Injectable, Renderer2, signal } from '@angular/core';
 import { NgxCarouselService } from './ngx-carousel.service';
 import { NgxAutoplayService } from './ngx-autoplay..service';
+import { NgxStateService } from './ngx-state.service';
 
 @Injectable()
 export class NgxSwipeService {
@@ -10,6 +11,7 @@ export class NgxSwipeService {
 
   private carousel = inject(NgxCarouselService);
   private autoplay = inject(NgxAutoplayService);
+  private state = inject(NgxStateService)
 
   private renderer!: Renderer2;
   private carouselList!: ElementRef<HTMLDivElement>;
@@ -17,7 +19,7 @@ export class NgxSwipeService {
   private currentX = 0;
 
   private isSwiping = signal(false);
-  private config = computed(() => this.carousel.getConfig())
+  // private config = computed(() => this.carousel.getConfig())
 
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.
@@ -49,9 +51,9 @@ export class NgxSwipeService {
 
         // Если отключена бесконечная прокрутка, то останавливаем свайп
     // при достижении первого и последнего слайда
-    if(!this.config().loop){
-      const length = this.carousel.getSlidesLength()
-      const current = this.carousel.currentSlide()
+    if(!this.state.loop()){
+      const length = this.state.slides().length
+      const current = this.state.currentSlide();
       
       if((current <= 0) && (this.currentX > 0)) return             // свайпаем на предыдущий слайд
       if((current + 1 >= length) && (this.currentX < 0)) return    // свайпаем на следующий слайд
@@ -68,7 +70,7 @@ export class NgxSwipeService {
     }
 
     // Смещение в процентах (пользовательское + текущий слайд)
-    const offset = -(this.carousel.currentSlide() * 100) +
+    const offset = -(this.state.currentSlide() * 100) +
       (this.currentX / this.carouselList.nativeElement.clientWidth) * 100;
 
     // Обновляем transform напрямую
@@ -107,7 +109,7 @@ export class NgxSwipeService {
       .setStyle(
         this.carouselList.nativeElement, 
         'transform', 
-        `translateX(-${this.carousel.currentSlide() * 100}%)`
+        `translateX(-${this.state.currentSlide() * 100}%)`
       )
   }
 }

@@ -1,21 +1,22 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { NgxCarouselService } from './ngx-carousel.service';
+import { NgxStateService } from './ngx-state.service';
 
 @Injectable()
 export class NgxAutoplayService {
   private carousel = inject(NgxCarouselService)
+  state = inject(NgxStateService)
   private isPlaying = signal(true)
-  private config = computed(() => this.carousel.getConfig());
   private timerAutoplay: any = null
 
   constructor() {
     effect(() => {
-      if(!this.config().autoplay || this.carousel.getSlidesLength() <= 1) {
+      if(!this.state.autoplay() || this.state.slides().length <= 1) {
         this.stop()
         return
       }
 
-      this.config().autoplay ?
+      this.state.autoplay() ?
         this.resume() :
         this.stop()
     })
@@ -23,10 +24,10 @@ export class NgxAutoplayService {
 
   private start() {
 
-    if (!this.config().autoplay || !this.isPlaying()) return
+    if (!this.state.autoplay() || !this.isPlaying()) return
     
     this.stop()
-    const delay  = this.config().interval ?? 5000
+    const delay  = this.state.interval() ?? 5000
     this.timerAutoplay = setInterval(() => this.carousel.next(), delay )
   }
 
@@ -39,13 +40,13 @@ export class NgxAutoplayService {
   }
 
   pause() {
-    if(this.config().pauseOnHover) {
+    if(this.state.pauseOnHover()) {
       this.stop();
     }
   }
 
   resume() {
-    if(this.config().autoplay) {
+    if(this.state.autoplay()) {
       this.isPlaying.set(true);
 
       setTimeout(() => this.start(), 0);

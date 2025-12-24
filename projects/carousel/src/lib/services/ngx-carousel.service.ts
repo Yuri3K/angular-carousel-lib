@@ -1,71 +1,70 @@
-import { computed, Inject, Injectable, Optional, signal } from '@angular/core';
-import {
-  DEFAULT_CAROUSEL_CONFIG,
-  NGX_CAROUSEL_CONFIG,
-  NgxCarouselConfig,
-} from '../ngx-carousel.types';
+import { inject, Injectable, signal } from '@angular/core';
+import { NgxStateService } from './ngx-state.service';
 
 @Injectable()
 export class NgxCarouselService {
-  private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
-  slidesData = signal<any[]>([]);
+  // private config = signal<NgxCarouselConfig>(DEFAULT_CAROUSEL_CONFIG);
+  // slidesData = signal<any[]>([]);
+  private state = inject(NgxStateService)
   disableTransition = signal(false);
-  currentSlide = signal(0);
 
-  slidesWithClones = computed(() => {
-    const slides = this.slidesData();
-    const length = slides.length;
+  // currentSlide = signal(0);
 
-    if (length <= 0) return [];
+  // slidesWithClones = computed(() => {
+  //   const slides = this.slidesData();
+  //   const length = slides.length;
 
-    if (this.config().loop && length > 1) {
-      return [
-        slides[length - 1], // Клон последнего в начало
-        ...slides, // Все оригинальные
-        slides[0], // Клон первого в конец
-      ];
-    }
+  //   if (length <= 0) return [];
 
-    return slides;
-  });
+  //   if (this.config().loop && length > 1) {
+  //     return [
+  //       slides[length - 1], // Клон последнего в начало
+  //       ...slides, // Все оригинальные
+  //       slides[0], // Клон первого в конец
+  //     ];
+  //   }
 
-  constructor(
-    @Optional() @Inject(NGX_CAROUSEL_CONFIG) defaultCtf: NgxCarouselConfig
-  ) {
-    this.config.set({
-      ...DEFAULT_CAROUSEL_CONFIG,
-      ...(defaultCtf || {}),
-    });
-  }
+  //   return slides;
+  // });
 
-  getConfig(): NgxCarouselConfig {
-    return this.config();
-  }
+  // constructor(
+  //   @Optional() @Inject(NGX_CAROUSEL_CONFIG) defaultCtf: NgxCarouselConfig
+  // ) {
+  //   this.config.set({
+  //     ...DEFAULT_CAROUSEL_CONFIG,
+  //     ...(defaultCtf || {}),
+  //   });
+  // }
 
-  registerSlides(slidesData: any[]) {
-    this.slidesData.set(slidesData);
+  // getConfig(): NgxCarouselConfig {
+  //   return this.config();
+  // }
 
-    const index = this.config().loop
-      ? (this.config().startIndex ?? 0) + 1
-      : this.config().startIndex ?? 0;
+  // registerSlides(slidesData: any[]) {
+  //   this.slidesData.set(slidesData);
 
-    this.currentSlide.set(index);
-  }
+  //   const index = this.config().loop
+  //     ? (this.config().startIndex ?? 0) + 1
+  //     : this.config().startIndex ?? 0;
 
-  getSlidesLength() {
-    return this.slidesData().length;
-  }
+  //   this.currentSlide.set(index);
+  // }
+
+  // getSlidesLength() {
+  //   return this.slidesData().length;
+  // }
 
   next() {
-    const length = this.getSlidesLength();
+    // const length = this.getSlidesLength();
+    const length = this.state.slides().length
     if (length <= 1) return;
 
     this.disableTransition.set(false);
-    const current = this.currentSlide();
+    const current = this.state.currentSlide();
 
-    if (this.config().loop) {
+    if (this.state.loop()) {
       // Переходим к следующему слайду (даже если это клон)
-      this.currentSlide.set(current + 1);
+      this.state.setCurrentSlide(current + 1);
 
       // Если достигли клона
       if (current + 1 >= length + 1) {
@@ -74,25 +73,25 @@ export class NgxCarouselService {
       }
     } else if (current + 1 < length) {
       // В режиме без loop просто проверяем границы
-      this.currentSlide.set(current + 1);
+      this.state.setCurrentSlide(current + 1);
     }
   }
 
   prev() {
-    const length = this.getSlidesLength();
+    const length = this.state.slides().length
     if (length <= 1) return;
 
     this.disableTransition.set(false);
-    const current = this.currentSlide();
+    const current = this.state.currentSlide();
 
-    if (this.config().loop) {
-      this.currentSlide.set(current - 1);
+    if (this.state.loop()) {
+      this.state.setCurrentSlide(current - 1);
 
       if (current - 1 <= 0) {
         this.scheduleSnapToReal(length);
       }
     } else if (current > 0) {
-      this.currentSlide.set(current - 1);
+      this.state.setCurrentSlide(current - 1);
     }
   }
 
@@ -106,7 +105,7 @@ export class NgxCarouselService {
       this.disableTransition.set(true);
 
       // Выполняем мгновенное переключение слайда без анимации
-      this.currentSlide.set(realIndex);
+      this.state.setCurrentSlide(realIndex);
 
       // Чтобы операция включения анимации выполнилась на следующем цикле Event Loop, задаем таймер
       setTimeout(() => {
@@ -116,31 +115,31 @@ export class NgxCarouselService {
   }
 
   goTo(index: number) {
-    const len = this.getSlidesLength();
-    if (len === 0) return;
+    const length = this.state.slides().length
+    if (length === 0) return;
 
-    if (this.config().loop) {
+    if (this.state.loop()) {
       // В режиме loop просто устанавливаем целевой индекс
-      this.currentSlide.set(index + 1);
+      this.state.setCurrentSlide(index + 1);
     } else {
-      this.currentSlide.set(index);
+      this.state.setCurrentSlide(index);
     }
   }
 
   getDisplayIndex(): number {
-    const len = this.getSlidesLength();
-    if (len === 0) return 0;
+    const length = this.state.slides().length
+    if (length === 0) return 0;
 
-    const current = this.currentSlide();
+    const current = this.state.currentSlide();
 
     // Если loop отключен, то просто вернем индекс текущего слайда
-    if (!this.config().loop) return current;
+    if (!this.state.loop()) return current;
 
     // Если на клоне последнего (индекс 0), показываем последний реальный
-    if (current === 0) return len - 1;
+    if (current === 0) return length - 1;
 
     // Если на клоне первого (индекс len + 1), показываем первый реальный
-    if (current === len + 1) return 0;
+    if (current === length + 1) return 0;
 
     // Иначе вычитаем 1, так как реальные слайды начинаются с индекса 1
     return current - 1;

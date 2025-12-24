@@ -5,7 +5,7 @@ import { DEFAULT_CAROUSEL_CONFIG, NGX_CAROUSEL_CONFIG, NgxCarouselConfig } from 
 export class NgxStateService {
   private config = signal<NgxCarouselConfig>({});
   private width = signal(0)
-  private slides = signal<any[]>([]);
+  slides = signal<any[]>([]);
   currentSlide = signal(0);
 
   private appCfg = inject(NGX_CAROUSEL_CONFIG, { optional: true });
@@ -19,6 +19,9 @@ export class NgxStateService {
   })
 
   slidesToShow = computed(() => this.activeConfig().slidesToShow ?? 1);
+  autoplay = computed(() => this.activeConfig().autoplay ?? true);
+  interval = computed(() => this.activeConfig().interval ?? 5000);
+  pauseOnHover = computed(() => this.activeConfig().pauseOnHover ?? true);
   space = computed(() => this.activeConfig().spaceBetween ?? 0);
   isFade = computed(() => this.activeConfig().animation === 'fade');
   loop = computed(() => this.activeConfig().loop)
