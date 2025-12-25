@@ -4,7 +4,7 @@ import { DEFAULT_CAROUSEL_CONFIG, NGX_CAROUSEL_CONFIG, NgxCarouselConfig } from 
 @Injectable()
 export class NgxStateService {
   private config = signal<NgxCarouselConfig>({});
-  private width = signal(0)
+  width = signal(0)
   slides = signal<any[]>([]);
   currentSlide = signal(0);
 
@@ -13,6 +13,8 @@ export class NgxStateService {
   /* ========= ACTIVECONFIG ========= */
   activeConfig = computed(() => {
     return {
+      ...DEFAULT_CAROUSEL_CONFIG,
+      ...this.appCfg ?? {},
       ...this.config(),
       ...this.activeBreakpoint() ?? {}
     }
@@ -71,16 +73,23 @@ export class NgxStateService {
 
       this.setCurrentSlide(index)
     })
+
+    // setInterval(() => {
+    //       console.log("ACTIVE", this.activeConfig())
+
+    // }, 1000)
+    setTimeout(() => {
+          console.log("ACTIVE", this.activeConfig())
+
+    }, 2000)
   }
 
   /* ========= INIT ========= */
   init(customConfig: NgxCarouselConfig = {}) {
     this.config.set({
-      ...DEFAULT_CAROUSEL_CONFIG,
-      ...this.appCfg ?? {},
       ...customConfig
     });
-    console.log("🔸 this.config:", this.config())
+    // console.log("🔸 this.config:", this.config())
   }
 
   setWidth(width: number) {

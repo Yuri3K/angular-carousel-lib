@@ -11,9 +11,7 @@
     #carouselList
     class="ngx-carousel__list"
     [class.no-transition]="carousel.disableTransition()"
-    [style.transform]="'translateX(-' + 
-      state.currentSlide() * 100 + 
-      '%)'"
+    [style.transform]="layout.translatePx()"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"
@@ -24,6 +22,8 @@
       <li
         class="ngx-carousel__slide"
         [class.active]="i === state.currentSlide()"
+        [style.width]="layout.slideWidthPx() + 'px'"
+        [style.marginRight.px]="state.space()"
       >
         <ng-container 
           [ngTemplateOutlet]="slideTemplate"

@@ -17,6 +17,7 @@ import { NgxAutoplayService } from './services/ngx-autoplay..service';
 import { NgxSwipeService } from './services/ngx-swipe.service';
 import { NgxStateService } from './services/ngx-state.service';
 import { NgxCarouselConfig } from './ngx-carousel.types';
+import { NgxLayoutService } from './services/ngx-layout.service';
 
 @Component({
   selector: 'lib-ngx-carousel',
@@ -28,6 +29,7 @@ import { NgxCarouselConfig } from './ngx-carousel.types';
     NgxAutoplayService,
     NgxSwipeService,
     NgxStateService,
+    NgxLayoutService,
   ],
 })
 export class NgxCarouselComponent implements OnInit, AfterViewInit {
@@ -46,6 +48,7 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   autoplay = inject(NgxAutoplayService);
   swipe = inject(NgxSwipeService);
   state = inject(NgxStateService);
+  layout = inject(NgxLayoutService);
 
   ngOnInit() {
     this.watchResize();
@@ -54,7 +57,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // this.carousel.registerSlides(this.slides);
     this.swipe.registerSlideList(this.carouselList);
     this.swipe.setRenderer(this.renderer);
 
