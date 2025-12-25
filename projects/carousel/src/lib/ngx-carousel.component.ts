@@ -66,7 +66,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   private watchResize() {
     this.resizeObserver = new ResizeObserver((entries) => {
       const width = entries[0].contentRect.width;
-      // this.layout.setCarouselWidth(width);
       this.state.setWidth(width);
     });
   }

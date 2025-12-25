@@ -29,6 +29,7 @@ export class NgxStateService {
   loop = computed(() => this.activeConfig().loop)
   isArrows = computed(() => this.activeConfig().showArrows)
   isDots = computed(() => this.activeConfig().showDots)
+  speed = computed(() => this.activeConfig().speed ?? 500)
 
   /* ========= BREAKPOINTS ========= */
   activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {
@@ -87,6 +88,8 @@ export class NgxStateService {
   /* ========= INIT ========= */
   init(customConfig: NgxCarouselConfig = {}) {
     this.config.set({
+      ...DEFAULT_CAROUSEL_CONFIG,
+      ...this.appCfg ?? {},
       ...customConfig
     });
     // console.log("🔸 this.config:", this.config())

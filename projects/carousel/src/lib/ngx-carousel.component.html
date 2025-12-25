@@ -12,6 +12,7 @@
     class="ngx-carousel__list"
     [class.no-transition]="carousel.disableTransition()"
     [style.transform]="layout.translatePx()"
+    [style.transition]="`transform ${state.speed()}ms ease`"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"

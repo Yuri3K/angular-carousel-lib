@@ -45,7 +45,7 @@ export class AppComponent {
     slidesToShow: 1,
     showDots: true,
     showArrows: true,
-    speed: 250,
+    speed: 500,
     spaceBetween: 20,
     breakpoints: [
       {
