@@ -64,9 +64,7 @@ export class NgxCarouselService {
       this.state.setCurrentSlide(current - 1);
 
       if (current - slidesToShow <= 0) {
-        console.log("🔸 current:", current)
         const index = this.getRealIndex(current - 1);
-        console.log("🔸 index:", index)
         this.scheduleJumpToReal(index);
       }
     } else if (current > 0) {
@@ -74,28 +72,9 @@ export class NgxCarouselService {
     }
   }
 
-  // /**
-  //  * Мгновенный переход к реальному слайду после завершения анимации
-  //  */
-  // private scheduleJumpToReal(realIndex: number) {
-  //   // Дожидаемся завершения анимации
-  //   setTimeout(() => {
-  //     // Отключаем анимацию
-  //     this.disableTransition.set(true);
-
-  //     // Выполняем мгновенное переключение слайда без анимации
-  //     this.state.setCurrentSlide(realIndex);
-
-  //     // Чтобы операция включения анимации выполнилась на следующем цикле Event Loop, задаем таймер
-  //     setTimeout(() => {
-  //       this.disableTransition.set(false);
-  //     }, 50);
-  //   }, 500); // Должно совпадать с длительностью transition в CSS
-  // }
-
   private scheduleJumpToReal(realIndex: number) {
     //Если таймер уже запущен, то остановить и обнулить
-    if(this.jumpTimer) {
+    if (this.jumpTimer) {
       clearTimeout(this.jumpTimer)
       this.jumpTimer = null
     }
@@ -111,7 +90,7 @@ export class NgxCarouselService {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           this.disableTransition.set(false)
-          if(this.jumpTimer) {
+          if (this.jumpTimer) {
             clearTimeout(this.jumpTimer)
             this.jumpTimer = null
           }
@@ -179,5 +158,35 @@ export class NgxCarouselService {
     if (real >= length) real -= length
 
     return real
+  }
+
+  shiftBy(slidesDragged: number) {
+    if (slidesDragged === 0) return;
+    if (!this.startAnimation()) return;
+
+    const current = this.state.currentSlide();
+    const slidesToShow = this.state.slidesToShow();
+    const total = this.state.slidesWithClones().length;
+
+    let target = current + slidesDragged;
+
+    this.disableTransition.set(false);
+
+    if (!this.state.loop()) {
+      const max = total - slidesToShow;
+      target = Math.max(0, Math.min(target, max));
+      this.state.setCurrentSlide(target);
+      return;
+    }
+
+    this.state.setCurrentSlide(target);
+
+    // вычисляем РЕАЛЬНЫЙ индекс
+    const realIndex = this.getRealIndex(target);
+
+    // если ушли в клоны — снапаемся туда же, но в реальной зоне
+    if (target < slidesToShow || target >= total - slidesToShow) {
+      this.scheduleJumpToReal(realIndex);
+    }
   }
 }
