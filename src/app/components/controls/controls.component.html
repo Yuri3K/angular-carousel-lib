@@ -1,0 +1,14 @@
+<div class="my-controls">
+  <button (click)="carousel.prev()">←</button>
+  <button (click)="carousel.next()">→</button>
+</div>
+
+<div class="my-bullets">
+  <div class="dots">
+    @for(dot of slides; track $index; let i = $index) {
+    <button class="dot" 
+      [class.active]="carousel.getDisplayIndex() == i"
+      (click)="carousel.goTo(i)">D</button>
+    }
+  </div>
+</div>

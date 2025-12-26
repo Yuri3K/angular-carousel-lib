@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { SlideComponent } from './components/slide/slide.component';
 import { NgxCarouselComponent, NgxCarouselConfig } from 'carousel';
+import { ControlsComponent } from './components/controls/controls.component';
 
 @Component({
   selector: 'app-root',
   imports: [
     NgxCarouselComponent,
-    SlideComponent
+    SlideComponent,
+    ControlsComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

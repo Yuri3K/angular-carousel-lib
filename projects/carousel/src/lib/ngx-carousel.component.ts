@@ -36,10 +36,12 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) slides!: any[];
   @Input() config!: NgxCarouselConfig;
 
-  @ViewChild('carouselList', { static: true })
+  @ViewChild('carouselList', { static: true }) 
   carouselList!: ElementRef<HTMLDivElement>;
-  @ContentChild('slideTemplate', { static: true })
+  @ContentChild('slideTemplate', { static: true }) 
   slideTemplate!: TemplateRef<any>;
+  @ContentChild('controlsTemplate', {static: true})  
+  controlsTemplate!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2);
   private resizeObserver!: ResizeObserver;

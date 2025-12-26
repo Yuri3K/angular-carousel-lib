@@ -7,5 +7,12 @@
     <ng-template #slideTemplate let-slide>
       <app-slide [slide]="slide" />
     </ng-template>
+
+    <ng-template #controlsTemplate let-carousel>
+      <app-controls 
+        [carousel]="carousel"
+        [slides]="slides"
+      />
+    </ng-template>
   </lib-ngx-carousel>
 </div>

@@ -34,5 +34,12 @@
     } 
   </ul>
 
-  <lib-ngx-carousel-controls />
+  @if(controlsTemplate) {
+    <ng-container 
+      [ngTemplateOutlet]="controlsTemplate"
+      [ngTemplateOutletContext]="{$implicit: carousel}"
+    />
+  } @else {
+    <lib-ngx-carousel-controls />
+  }
 </div>
