@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SlideComponent } from './components/slide/slide.component';
-import { NgxCarouselComponent, NgxCarouselConfig } from 'carousel';
 import { ControlsComponent } from './components/controls/controls.component';
+import { NgxCarouselComponent, NgxCarouselConfig } from 'carousel';
 
 @Component({
   selector: 'app-root',
