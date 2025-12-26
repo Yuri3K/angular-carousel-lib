@@ -50,7 +50,7 @@ export class NgxStateService {
     const slides = this.slides();
     const count = this.slidesToShow();
 
-    if (!this.loop() && slides.length < count) {
+    if (!this.loop() || slides.length < count) {
       return slides;
     }
 

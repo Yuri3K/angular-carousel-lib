@@ -1,5 +1,5 @@
 
-<div class="carousel-wrapper" style="max-width: 1500px;">
+<div class="carousel-wrapper" style="max-width: 1000px;">
   <lib-ngx-carousel 
     [slides]="slides"
     [config]="customConfig"
@@ -13,6 +13,22 @@
         [carousel]="carousel"
         [slides]="slides"
       />
+    </ng-template>
+  </lib-ngx-carousel>
+</div>
+
+<br>
+<br>
+<hr>
+<br>
+<br>
+
+<div class="carousel-wrapper2">
+  <lib-ngx-carousel 
+    [slides]="slides"
+  >
+    <ng-template #slideTemplate let-slide>
+      <app-slide [slide]="slide" />
     </ng-template>
   </lib-ngx-carousel>
 </div>
