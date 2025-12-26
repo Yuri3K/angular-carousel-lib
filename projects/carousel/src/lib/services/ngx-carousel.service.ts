@@ -82,7 +82,7 @@ export class NgxCarouselService {
     const slidesToShow = this.state.slidesToShow()
     const realTarget = realIndex + slidesToShow
 
-    // Заново запысываес новый таймер
+    // Заново запысываем новый таймер
     this.jumpTimer = setTimeout(() => {
       this.disableTransition.set(true)
       this.state.setCurrentSlide(realTarget)

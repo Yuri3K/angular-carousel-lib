@@ -1,6 +1,16 @@
 {
-  "name": "@ys/ngx-carousel",
+  "name": "@ys/ngx-freshok-carousel",
   "version": "0.0.1",
+  "description": "This is a test library written for the 'Fresh-ok' project.",
+  "keywords": ["freshok", "carousel", "angular"],
+  "author": {
+    "name": "Yuri",
+    "email": "sidorenkourij970@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yuri3K/angular-carousel-lib"
+  },
   "peerDependencies": {
     "@angular/common": "^19.2.0",
     "@angular/core": "^19.2.0"
