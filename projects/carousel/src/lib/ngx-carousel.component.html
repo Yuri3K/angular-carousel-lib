@@ -45,6 +45,9 @@
       [ngTemplateOutletContext]="{$implicit: carousel}"
     />
   } @else {
-    <lib-ngx-carousel-controls />
+    <lib-ngx-carousel-controls 
+      [iconLeft]="iconLeft"
+      [iconRight]="iconRight"
+    />
   }
 </div>

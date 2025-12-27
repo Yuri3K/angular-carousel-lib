@@ -35,15 +35,17 @@ import { NgxLayoutService } from './services/ngx-layout.service';
 export class NgxCarouselComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) slides!: any[];
   @Input() config!: NgxCarouselConfig;
-
   
-
   @ViewChild('carouselList', { static: true }) 
   carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', { static: true }) 
   slideTemplate!: TemplateRef<any>;
   @ContentChild('controlsTemplate', {static: true})  
   controlsTemplate!: TemplateRef<any>
+  @ContentChild('iconLeft', {static: true})
+  iconLeft!: TemplateRef<any>
+  @ContentChild('iconRight', {static: true})
+  iconRight!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2);
   private resizeObserver!: ResizeObserver;
@@ -58,13 +60,17 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
     this.watchResize();
     this.state.init(this.config)
     this.state.setSlides(this.slides)
+        console.log("🔸 iconLeft:", this.iconLeft)
+
   }
 
   ngAfterViewInit(): void {
     this.swipe.registerSlideList(this.carouselList);
     this.swipe.setRenderer(this.renderer);
 
+    console.log("🔸 iconLeft:", this.iconLeft)
     this.resizeObserver.observe(this.carouselList.nativeElement);
+
   }
 
   private watchResize() {
