@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: var(--user-controls-padding, 0 20px);
   top: var(--user-controls-top, 50%);
   transform: translateY(-50%);
   left: 0;
@@ -16,33 +16,62 @@
   }
 }
 
-button {
+.ngx-carousel__btn {
   pointer-events: auto;
   cursor: pointer;
-}
+  width: var(--user-controls-btn-width, auto);
+  height: var(--user-controls-btn-heigth, auto);
+  border: var(--user-controls-btn-border, 2px solid black);
+  background-color: var(--user-controls-btn-bg, transparent);
+  border-radius: var(--user-controls-btn-radius, 4px);
+  transition: background-color 0.2s ease-in-out;
+  padding: var(--user-controls-btn-padding, 10px);
 
+  &:hover {
+    background-color: var(--user-controls-btn-hover-bg, lightgray);
+
+    svg {
+      fill: var(--user-controls-btn-hover-fill, brown);
+    }
+  }
+
+  svg {
+    width: var(--user-controls-btn-svg-width, auto);
+    height: var(--user-controls-btn-svg-height, auto);
+    fill: var(--user-controls-btn-fill, red);
+  }
+}
 
 .ngx-carousel__dots {
   position: absolute;
-  bottom: 20px;
+  top: var(--user-controls-dots-top, unset);
+  bottom: var(--user-controls-dots-bottom, 20px);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: var(--user-controls-dots-gap, 20px);
 }
 
 .ngx-carousel__dot {
   pointer-events: auto;
   cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: 2px solid blue;
-  background-color: yellow;
-  border-radius: 50%;
+  width: var(--user-controls-dot-width, 20px);
+  height: var(--user-controls-dot-height, 20px);
+  border: var(--user-controls-dot-border, 2px solid blue);
+  background-color: var(--user-controls-dot-bg, yellow);
+  border-radius: var(--user-controls-dot-radius, 50%);
+
+  &:hover {
+    background-color: var(--user-controls-dot-hover-bg, green);
+  }
 
   &.active {
-    background-color: orange;
+    background-color: var(--user-controls-dot-active-bg, orange);
+
+    &:hover {
+      background-color: var(--user-controls-dot-active-bg-hover, blue);
+    }
   }
 }

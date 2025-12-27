@@ -36,6 +36,8 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) slides!: any[];
   @Input() config!: NgxCarouselConfig;
 
+  
+
   @ViewChild('carouselList', { static: true }) 
   carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', { static: true }) 

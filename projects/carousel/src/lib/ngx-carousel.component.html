@@ -1,5 +1,8 @@
 <div
   class="ngx-carousel"
+  tabindex="0"
+  aria-roledescription="carousel"
+  aria-live="polite"
   (keydown.arrowRight)="carousel.next()"
   (keydown.arrowLeft)="carousel.prev()"
   (mouseleave)="autoplay.resume()"
@@ -9,6 +12,7 @@
 >
   <ul
     #carouselList
+    role="listbox"
     class="ngx-carousel__list"
     [class.no-transition]="carousel.disableTransition()"
     [style.transform]="layout.translatePx()"
@@ -21,6 +25,7 @@
   >
     @for(slideData of state.slidesWithClones(); track $index; let i = $index) {
       <li
+        role="option"
         class="ngx-carousel__slide"
         [class.active]="i === state.currentSlide()"
         [style.width]="layout.slideWidthPx() + 'px'"

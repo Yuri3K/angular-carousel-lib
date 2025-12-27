@@ -1,15 +1,21 @@
 @if(state.isArrows()) {
   <div class="ngx-carousel__controls">
     <button
+      type="button"
+      class="ngx-carousel__btn"
       (click)="carousel.prev()"
+      aria-label="Previous slide"
     >
-    Prev
+      <svg width="11" height="20" viewBox="0 0 11 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.617 20.0762C10.8882 19.805 10.8882 19.3654 10.617 19.0942L1.80242 10.2796L10.617 1.46497C10.8882 1.19379 10.8882 0.754138 10.617 0.482966C10.3459 0.211794 9.90621 0.211794 9.63504 0.482966L0.565868 9.55214C0.164103 9.9539 0.164103 10.6053 0.565868 11.007L9.63504 20.0762C9.90621 20.3474 10.3459 20.3474 10.617 20.0762Z"></path></svg>
     </button>
   
     <button
+      type="button"
+      class="ngx-carousel__btn"
+      aria-label="Next slide"
       (click)="carousel.next()"
     >
-    Next
+      <svg width="11" height="20" viewBox="0 0 11 20" xmlns="http://www.w3.org/2000/svg"><path d="M0.38296 20.0762C0.111788 19.805 0.111788 19.3654 0.38296 19.0942L9.19758 10.2796L0.38296 1.46497C0.111788 1.19379 0.111788 0.754138 0.38296 0.482966C0.654131 0.211794 1.09379 0.211794 1.36496 0.482966L10.4341 9.55214C10.8359 9.9539 10.8359 10.6053 10.4341 11.007L1.36496 20.0762C1.09379 20.3474 0.654131 20.3474 0.38296 20.0762Z"></path></svg>
     </button>
   </div>
 }
@@ -17,10 +23,14 @@
 @if(state.isDots()) {
   <div class="ngx-carousel__controls bullets">
     <div 
+      role="tablist"
+      aria-label="Carousel indicators"
       class="ngx-carousel__dots"
     >
       @for(dot of state.slides(); track $index; let i = $index) {
         <button
+          type="button"
+          [attr.aria-selected]="carousel.getDisplayIndex() == i"
           class="ngx-carousel__dot"
           [class.active]="carousel.getDisplayIndex() == i"
           (click)="carousel.goTo(i)"
