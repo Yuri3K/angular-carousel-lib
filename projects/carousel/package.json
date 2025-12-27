@@ -2,7 +2,11 @@
   "name": "@ys/ngx-freshok-carousel",
   "version": "0.0.1",
   "description": "This is a test library written for the 'Fresh-ok' project.",
-  "keywords": ["freshok", "carousel", "angular"],
+  "keywords": [
+    "freshok",
+    "carousel",
+    "angular"
+  ],
   "author": {
     "name": "Yuri",
     "email": "sidorenkourij970@gmail.com"
@@ -18,5 +22,10 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://github.com/Yuri3K/angular-carousel-lib#readme",
+  "bugs": {
+    "url": "https://github.com/Yuri3K/angular-carousel-lib/issues"
+  }
 }
