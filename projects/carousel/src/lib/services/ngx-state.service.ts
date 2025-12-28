@@ -75,12 +75,7 @@ export class NgxStateService {
       this.setCurrentSlide(index)
     })
 
-    // setInterval(() => {
-    //       console.log("ACTIVE", this.activeConfig())
-
-    // }, 1000)
     setTimeout(() => {
-          console.log("ACTIVE", this.activeConfig())
 
     }, 2000)
   }
@@ -92,12 +87,10 @@ export class NgxStateService {
       ...this.appCfg ?? {},
       ...customConfig
     });
-    // console.log("🔸 this.config:", this.config())
   }
 
   setWidth(width: number) {
     this.width.set(width)
-    // console.log("ACTIVE", this.activeConfig())
   }
 
   setSlides(slides: any[]) {

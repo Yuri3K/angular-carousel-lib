@@ -60,7 +60,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
     this.watchResize();
     this.state.init(this.config)
     this.state.setSlides(this.slides)
-        console.log("🔸 iconLeft:", this.iconLeft)
 
   }
 
@@ -68,7 +67,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
     this.swipe.registerSlideList(this.carouselList);
     this.swipe.setRenderer(this.renderer);
 
-    console.log("🔸 iconLeft:", this.iconLeft)
     this.resizeObserver.observe(this.carouselList.nativeElement);
 
   }
