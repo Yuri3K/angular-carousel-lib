@@ -36,16 +36,13 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) slides!: any[];
   @Input() config!: NgxCarouselConfig;
   
-  @ViewChild('carouselList', { static: true }) 
-  carouselList!: ElementRef<HTMLDivElement>;
-  @ContentChild('slideTemplate', { static: true }) 
-  slideTemplate!: TemplateRef<any>;
-  @ContentChild('controlsTemplate', {static: true})  
-  controlsTemplate!: TemplateRef<any>
-  @ContentChild('iconLeft', {static: true})
-  iconLeft!: TemplateRef<any>
-  @ContentChild('iconRight', {static: true})
-  iconRight!: TemplateRef<any>
+  @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
+  @ContentChild('slideTemplate', { static: true }) slideTemplate!: TemplateRef<any>;
+  @ContentChild('controlsTemplate', {static: true}) controlsTemplate!: TemplateRef<any>
+  @ContentChild('iconLeft', {static: true}) iconLeft!: TemplateRef<any>
+  @ContentChild('iconRight', {static: true}) iconRight!: TemplateRef<any>
+  @ContentChild('btnLeft', {static: true}) btnLeft!: TemplateRef<any>
+  @ContentChild('btnRight', {static: true}) btnRight!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2);
   private resizeObserver!: ResizeObserver;
@@ -60,7 +57,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
     this.watchResize();
     this.state.init(this.config)
     this.state.setSlides(this.slides)
-
   }
 
   ngAfterViewInit(): void {
@@ -68,7 +64,6 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
     this.swipe.setRenderer(this.renderer);
 
     this.resizeObserver.observe(this.carouselList.nativeElement);
-
   }
 
   private watchResize() {

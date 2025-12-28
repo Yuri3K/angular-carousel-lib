@@ -10,6 +10,8 @@ import { NgTemplateOutlet } from '@angular/common';
   styleUrl: './ngx-carousel-controls.component.scss',
 })
 export class NgxCarouselControlsComponent {
+  @Input() btnLeft!: TemplateRef<any>
+  @Input() btnRight!: TemplateRef<any>
   @Input() iconLeft!: TemplateRef<any>
   @Input() iconRight!: TemplateRef<any>
   

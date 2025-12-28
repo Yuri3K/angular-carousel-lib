@@ -1,33 +1,48 @@
 @if(state.isArrows()) {
   <div class="ngx-carousel__controls">
-    <button
-      type="button"
-      class="ngx-carousel__btn"
-      (click)="carousel.prev()"
-      aria-label="Previous slide"
-    >
-      <ng-container 
-        [ngTemplateOutlet]="iconLeft || defaultIconLeft"
-      />
-    </button>
+    <ng-container 
+      [ngTemplateOutlet]="btnLeft || defaultBtnLeft"
+      [ngTemplateOutletContext]="{$implicit: carousel}"
+    />
 
-    <ng-template #defaultIconLeft>
-      <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 0 24 24" width="40px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
+    <ng-template #defaultBtnLeft>
+      <button
+        type="button"
+        class="ngx-carousel__btn"
+        (click)="carousel.prev()"
+        aria-label="Previous slide"
+      >
+        <ng-container 
+          [ngTemplateOutlet]="iconLeft || defaultIconLeft"
+        />
+      </button>
+  
+      <ng-template #defaultIconLeft>
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 0 24 24" width="40px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg>
+      </ng-template>
     </ng-template>
   
-    <button
-      type="button"
-      class="ngx-carousel__btn"
-      aria-label="Next slide"
-      (click)="carousel.next()"
-    >
-      <ng-container 
-        [ngTemplateOutlet]="iconRight || defaultIconRight"
-      />
-    </button>
 
-    <ng-template #defaultIconRight>
-      <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 0 24 24" width="40px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+    <ng-container 
+      [ngTemplateOutlet]="btnRight || defaultBtnRight"
+      [ngTemplateOutletContext]="{$implicit: carousel}"
+    />
+
+    <ng-template #defaultBtnRight>
+      <button
+        type="button"
+        class="ngx-carousel__btn"
+        aria-label="Next slide"
+        (click)="carousel.next()"
+      >
+        <ng-container 
+          [ngTemplateOutlet]="iconRight || defaultIconRight"
+        />
+      </button>
+  
+      <ng-template #defaultIconRight>
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 0 24 24" width="40px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+      </ng-template>
     </ng-template>
   </div>
 }
