@@ -15,6 +15,7 @@
     role="listbox"
     class="ngx-carousel__list"
     [class.no-transition]="carousel.disableTransition()"
+    [class.grabbing]="swipe.isSwiping()"
     [style.transform]="layout.translatePx()"
     [style.transition]="`transform ${state.speed()}ms ease`"
     (pointerdown)="swipe.onPointerDown($event)"

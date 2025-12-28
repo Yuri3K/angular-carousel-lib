@@ -20,8 +20,7 @@ export class NgxSwipeService {
   private startX = 0;
   private currentX = 0;
 
-  private isSwiping = signal(false);
-  // private config = computed(() => this.carousel.getConfig())
+  isSwiping = signal(false);
 
   // Определяем, был ли свайп достаточным, чтобы считать его жестом, а не кликом.
   // Будет использоваться для блокировки кликов по ссылкам.

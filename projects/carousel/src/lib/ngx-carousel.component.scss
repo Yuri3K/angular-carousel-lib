@@ -21,6 +21,10 @@
   &.no-transition {
     transition: none !important;
   }
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }
 
 .ngx-carousel__slide {
