@@ -69,7 +69,15 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
   private watchResize() {
     this.resizeObserver = new ResizeObserver((entries) => {
       const width = entries[0].contentRect.width;
+
+      // Отключаем анимацию, чтобы карусель перестроилась мгновенно
+      this.carousel.disableTransition.set(true)
       this.state.setWidth(width);
+
+      // Включаем анимацию обратно, когда браузер перерисовал страницу
+      requestAnimationFrame(() => {
+        this.carousel.disableTransition.set(false)
+      })
     });
   }
 }
