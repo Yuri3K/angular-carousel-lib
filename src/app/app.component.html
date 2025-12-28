@@ -49,11 +49,17 @@
     </ng-template>
 
     <ng-template #btnLeft let-carousel>
-      <button (click)="carousel.prev()">PR</button>
+      <button 
+        class="custom-btn" 
+        (click)="carousel.prev()"
+      >PR</button>
     </ng-template>
 
     <ng-template #btnRight let-carousel>
-      <button (click)="carousel.next()">NX</button>
+      <button 
+        class="custom-btn"
+        (click)="carousel.next()"
+      >NX</button>
     </ng-template>
   </lib-ngx-carousel>
 </div>
