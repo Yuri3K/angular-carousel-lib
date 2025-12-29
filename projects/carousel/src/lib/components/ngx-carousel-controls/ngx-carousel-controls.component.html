@@ -1,9 +1,11 @@
 @if(state.isArrows()) {
   <div class="ngx-carousel__controls">
-    <ng-container 
-      [ngTemplateOutlet]="btnLeft || defaultBtnLeft"
-      [ngTemplateOutletContext]="{$implicit: carousel}"
-    />
+    <div class="ngx-carousel__custom-btn">
+      <ng-container 
+        [ngTemplateOutlet]="btnLeft || defaultBtnLeft"
+        [ngTemplateOutletContext]="{$implicit: carousel}"
+      />
+    </div>
 
     <ng-template #defaultBtnLeft>
       <button
@@ -22,11 +24,12 @@
       </ng-template>
     </ng-template>
   
-
-    <ng-container 
-      [ngTemplateOutlet]="btnRight || defaultBtnRight"
-      [ngTemplateOutletContext]="{$implicit: carousel}"
-    />
+    <div class="ngx-carousel__custom-btn">
+      <ng-container 
+        [ngTemplateOutlet]="btnRight || defaultBtnRight"
+        [ngTemplateOutletContext]="{$implicit: carousel}"
+      />
+    </div>
 
     <ng-template #defaultBtnRight>
       <button
@@ -57,11 +60,14 @@
       @for(dot of state.slides(); track $index; let i = $index) {
         <button
           type="button"
+          role="tab"
           [attr.aria-selected]="carousel.getDisplayIndex() == i"
           class="ngx-carousel__dot"
           [class.active]="carousel.getDisplayIndex() == i"
           (click)="carousel.goTo(i)"
-        ></button>
+        >
+          <span class="ngx-carousel__click-area"></span>
+        </button>
       }
     </div>
   </div>

@@ -1,6 +1,8 @@
 <div
   class="ngx-carousel"
   tabindex="0"
+  role="region"
+  [attr.aria-live]="state.autoplay() ? 'off' : 'polite'"
   aria-roledescription="carousel"
   aria-live="polite"
   (keydown.arrowRight)="carousel.next()"
@@ -27,6 +29,7 @@
     @for(slideData of state.slidesWithClones(); track $index; let i = $index) {
       <li
         role="option"
+        aria-roledescription="slide"
         class="ngx-carousel__slide"
         [class.active]="i === state.currentSlide()"
         [style.width]="layout.slideWidthPx() + 'px'"

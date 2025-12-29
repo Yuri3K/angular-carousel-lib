@@ -42,6 +42,11 @@
   }
 }
 
+.ngx-carousel__custom-btn{
+  pointer-events: all;
+  cursor: pointer;
+}
+
 .ngx-carousel__dots {
   position: absolute;
   top: var(--user-controls-dots-top, unset);
@@ -55,6 +60,8 @@
 }
 
 .ngx-carousel__dot {
+  position: relative;
+  transform-origin: center;
   pointer-events: auto;
   cursor: pointer;
   width: var(--user-controls-dot-width, 20px);
@@ -74,4 +81,13 @@
       background-color: var(--user-controls-dot-active-bg-hover, blue);
     }
   }
+}
+
+.ngx-carousel__click-area{
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  width: var(--user-controls-dot-click-area-width, 30px);
+  height: var(--user-controls-dot-click-area-heigth, 30px);
 }
