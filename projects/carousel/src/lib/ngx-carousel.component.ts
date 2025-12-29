@@ -6,6 +6,7 @@ import {
   ElementRef,
   inject,
   Input,
+  OnDestroy,
   OnInit,
   Renderer2,
   TemplateRef,
@@ -32,7 +33,7 @@ import { NgxLayoutService } from './services/ngx-layout.service';
     NgxLayoutService,
   ],
 })
-export class NgxCarouselComponent implements OnInit, AfterViewInit {
+export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input({ required: true }) slides!: any[];
   @Input() config!: NgxCarouselConfig;
   
@@ -71,5 +72,9 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit {
       const width = entries[0].contentRect.width;
       this.state.setWidth(width);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
   }
 }
