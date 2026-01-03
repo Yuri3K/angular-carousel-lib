@@ -3,8 +3,10 @@ import {
   AfterViewInit,
   Component,
   ContentChild,
+  effect,
   ElementRef,
   inject,
+  input,
   Input,
   OnDestroy,
   OnInit,
@@ -34,8 +36,11 @@ import { NgxLayoutService } from './services/ngx-layout.service';
   ],
 })
 export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input({ required: true }) slides!: any[];
-  @Input() config!: NgxCarouselConfig;
+  // @Input({ required: true }) slides!: any[];
+  // @Input() config!: NgxCarouselConfig;
+
+  slides = input.required<any[]>()
+  config = input<NgxCarouselConfig>({})
   
   @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', { static: true }) slideTemplate!: TemplateRef<any>;
@@ -54,10 +59,18 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
   state = inject(NgxStateService);
   layout = inject(NgxLayoutService);
 
+  constructor() {
+    effect(() => {
+      this.state.setSlides(this.slides())
+    })
+
+    effect(() => {
+      this.state.init(this.config())
+    });
+  }
+
   ngOnInit() {
     this.watchResize();
-    this.state.init(this.config)
-    this.state.setSlides(this.slides)
   }
 
   ngAfterViewInit(): void {
