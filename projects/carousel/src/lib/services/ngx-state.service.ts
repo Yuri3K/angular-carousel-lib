@@ -30,6 +30,7 @@ export class NgxStateService {
   isArrows = computed(() => this.activeConfig().showArrows)
   isDots = computed(() => this.activeConfig().showDots)
   speed = computed(() => this.activeConfig().speed ?? 500)
+  easing = computed(() => this.activeConfig().easing ?? 'ease')
 
   /* ========= BREAKPOINTS ========= */
   activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {

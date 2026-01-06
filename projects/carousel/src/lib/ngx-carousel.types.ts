@@ -4,12 +4,21 @@ export interface NgxCarouselBreakpoint extends NgxCarouselConfig {
   breakpoint: number; // Ширина экрана, при которой применяется конфигурация (max-width)
 }
 
+export type AnimationEasing =
+  | 'linear'            // Равномерно, без ускорений
+  | 'ease'              // Немного разгон → немного торможение
+  | 'ease-in'           // Медленно → быстрее
+  | 'ease-out'          // Быстро → медленно
+  | 'ease-in-out'       // Медленно → быстро → медленно
+  | `cubic-bezier(${number}, ${number}, ${number}, ${number})`;
+
 export interface NgxCarouselConfig {
   autoplay?: boolean,
   interval?: number,
   loop?: boolean,
   pauseOnHover?: boolean;
   animation?: 'slide' | 'fade',
+  easing?: AnimationEasing;
   startIndex?: number,
   slidesToShow?: number
   showArrows?: boolean;

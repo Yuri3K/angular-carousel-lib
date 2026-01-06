@@ -67,6 +67,11 @@ export class AppComponent {
         showArrows: true,
         showDots: true,
         slidesToShow: 3,
+        loop: true,
+        autoplay: true,
+        speed: 1000,
+        interval: 0,
+        easing: 'linear'
       },
 
     ]

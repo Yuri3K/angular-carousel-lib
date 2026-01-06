@@ -19,7 +19,7 @@
     [class.no-transition]="carousel.disableTransition()"
     [class.grabbing]="swipe.isSwiping()"
     [style.transform]="layout.translatePx()"
-    [style.transition]="`transform ${state.speed()}ms ease`"
+    [style.transition]="`transform ${state.speed()}ms ${state.easing()}`"
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"

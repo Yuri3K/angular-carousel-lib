@@ -2,7 +2,7 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  height: auto;
+  height: var(--carousel-list-height, auto);
 
   &:focus-visible {
     outline: var(--carousel-outline, 2px solid #005fcc);
