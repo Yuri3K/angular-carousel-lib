@@ -34,6 +34,7 @@ export class NgxStateService {
   easing = computed(() => this.activeConfig().easing ?? 'ease')
   mode = computed(() => this.activeConfig().mode ?? 'carousel')
   nonStopSpeed = computed(() => this.activeConfig().nonStopSpeed ?? 40)
+  stopAutoplayBtn = computed(() => this.activeConfig().stopAutoplayBtn ?? false)
 
   /* ========= BREAKPOINTS ========= */
   activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {

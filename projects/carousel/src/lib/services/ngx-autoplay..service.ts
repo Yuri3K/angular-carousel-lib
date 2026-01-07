@@ -6,7 +6,7 @@ import { NgxStateService } from './ngx-state.service';
 export class NgxAutoplayService {
   private carousel = inject(NgxCarouselService)
   state = inject(NgxStateService)
-  private isPlaying = signal(true)
+  isPlaying = signal(true)
   private timerAutoplay: any = null
 
   constructor() {
@@ -51,5 +51,13 @@ export class NgxAutoplayService {
 
       setTimeout(() => this.start(), 0);
     }
+  }
+
+  toggle() {
+    if(this.state.mode() == 'non-stop') return
+
+    this.isPlaying() 
+      ? this.stop()
+      : this.start()
   }
 }

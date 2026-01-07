@@ -7,7 +7,7 @@ export class NgxNonStopService {
   private state = inject(NgxStateService);
   private layout = inject(NgxLayoutService);
 
-  private rafId: number | null = null;
+  rafId: number | null = null;
   private lastTime = 0;
 
   start() {
@@ -33,8 +33,8 @@ export class NgxNonStopService {
     this.state.nonStopOffsetPx.update((v) => v + delta * speedPxPerMs);
 
     const limitWidth =
-      this.state.slides().length * 2 *
-      (this.layout.slideWidthPx() + this.state.space());
+      this.state.slides().length * 2 * this.layout.slideWidthPx() +
+      this.state.slides().length * 2 * this.state.space();
 
     if (this.state.nonStopOffsetPx() >= limitWidth) {
       this.state.nonStopOffsetPx.set(0);
@@ -42,4 +42,12 @@ export class NgxNonStopService {
 
     this.rafId = requestAnimationFrame(this.tick);
   };
+
+  toggle() {
+    if(this.state.mode() !== 'non-stop') return
+
+    this.rafId 
+      ? this.stop()
+      : this.start()
+  }
 }

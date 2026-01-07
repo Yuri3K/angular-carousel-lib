@@ -42,7 +42,7 @@
   }
 }
 
-.ngx-carousel__custom-btn{
+.ngx-carousel__custom-btn {
   pointer-events: all;
   cursor: pointer;
 }
@@ -83,6 +83,7 @@
   }
 }
 
+// Зона клика по точке
 .ngx-carousel__click-area{
   transform: translate(-50%, -50%);
   top: 50%;
@@ -90,4 +91,12 @@
   position: absolute;
   width: var(--user-controls-dot-click-area-width, 30px);
   height: var(--user-controls-dot-click-area-heigth, 30px);
+}
+
+.ngx-carousel__stop-btn{
+  position: var(--user-controls-btn-stop-position, absolute);
+  left: var(--user-controls-btn-stop-left-pos, unset);
+  top: var(--user-controls-btn-stop-top-pos, unset);
+  right: var(--user-controls-btn-stop-right-pos, 5px);
+  bottom: var(--user-controls-btn-stop-bottom-pos, 5px);
 }

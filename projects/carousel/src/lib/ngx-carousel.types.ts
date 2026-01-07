@@ -18,6 +18,7 @@ export interface NgxCarouselConfig {
   mode?: CarouselMode;
   nonStopSpeed?: number;
   autoplay?: boolean;
+  stopAutoplayBtn?: boolean;
   interval?: number;
   loop?: boolean;
   pauseOnHover?: boolean;
@@ -36,6 +37,7 @@ export const DEFAULT_CAROUSEL_CONFIG: NgxCarouselConfig = {
   mode: 'carousel', // режим карусели (перелистывание или безостановочная лента)
   nonStopSpeed: 40, // cкорость ленты в px/sec (только для 'non-stop')
   autoplay: true, // автопроигрывание слайдов
+  stopAutoplayBtn: false, // показывать кнопку остановки автопроигрывания
   interval: 5000, // время переключения слайдов
   loop: true,     // бесконечная прокрутка
   pauseOnHover: true, // останавливать автопрокрутку при наведении

@@ -42,7 +42,7 @@
   display: flex;
   flex-shrink: 0;
   position: relative;
-  box-shadow: 0 0 0 1px red;
+  // box-shadow: 0 0 0 1px red;
 
   &.no-interaction {
     pointer-events: none;

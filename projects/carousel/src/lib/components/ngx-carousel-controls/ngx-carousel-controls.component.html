@@ -73,4 +73,53 @@
   </div>
 }
 
+@if(state.stopAutoplayBtn()) {
+  <div class="ngx-carousel__stop-btn">
+    <div class="ngx-carousel__custom-btn">
+      <ng-container 
+        [ngTemplateOutlet]="stopBtn || defaulStoptBtn"
+        [ngTemplateOutletContext]="{autoplay, nonStop}"
+      />
+    </div>
+
+    <ng-template #defaulStoptBtn>
+      <button
+        type="button"
+        class="ngx-carousel__btn"
+        (click)="nonStop.toggle(); autoplay.toggle()"
+        aria-label="Toggle autoplay"
+      >
+        @if(state.mode() == 'non-stop' && nonStop.rafId) {
+          <ng-container 
+            [ngTemplateOutlet]="iconPause || defaultIconPause"
+          />
+        }
+        @if(state.mode() == 'non-stop' && !nonStop.rafId) {
+          <ng-container 
+            [ngTemplateOutlet]="iconPlay || defaultIconPlay"
+          />
+        }
+        @if(state.mode() == 'carousel' && autoplay.isPlaying()) {
+          <ng-container 
+            [ngTemplateOutlet]="iconPause || defaultIconPause"
+          />
+        }
+        @if(state.mode() == 'carousel' && !autoplay.isPlaying()) {
+          <ng-container 
+            [ngTemplateOutlet]="iconPlay || defaultIconPlay"
+          />
+        }
+      </button>
+  
+      <ng-template #defaultIconPause>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </ng-template>
+  
+      <ng-template #defaultIconPlay>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/></svg>
+      </ng-template>
+    </ng-template>
+  </div>
+}
+
 
