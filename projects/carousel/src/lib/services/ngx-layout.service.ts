@@ -17,7 +17,6 @@ export class NgxLayoutService {
     if (this.state.isFade()) return 'none';
 
     if (this.state.mode() == 'non-stop') {
-      console.log("!!! IN !!!")
       return `translateX(${-this.state.nonStopOffsetPx()}px)`
     }
 

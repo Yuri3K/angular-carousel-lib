@@ -4,7 +4,6 @@ import { NgxLayoutService } from './ngx-layout.service';
 
 @Injectable()
 export class NgxNonStopService {
-
   private state = inject(NgxStateService);
   private layout = inject(NgxLayoutService);
 
@@ -12,7 +11,6 @@ export class NgxNonStopService {
   private lastTime = 0;
 
   start() {
-    console.log("START")
     if (this.rafId !== null) return;
 
     this.lastTime = performance.now();
@@ -30,15 +28,15 @@ export class NgxNonStopService {
     const delta = time - this.lastTime;
     this.lastTime = time;
 
-    const speedPxPerMs =
-      (this.state.nonStopSpeed() ?? 40) / 1000;
+    const speedPxPerMs = (this.state.nonStopSpeed() ?? 40) / 1000;
 
-    this.state.nonStopOffsetPx.update(v => v + delta * speedPxPerMs);
+    this.state.nonStopOffsetPx.update((v) => v + delta * speedPxPerMs);
 
-    const totalWidth = 
-      this.state.slides().length * 2 * this.layout.slideWidthPx()
+    const limitWidth =
+      this.state.slides().length * 2 *
+      (this.layout.slideWidthPx() + this.state.space());
 
-    if (this.state.nonStopOffsetPx() >= totalWidth) {
+    if (this.state.nonStopOffsetPx() >= limitWidth) {
       this.state.nonStopOffsetPx.set(0);
     }
 

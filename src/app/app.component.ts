@@ -67,7 +67,7 @@ export class AppComponent {
         breakpoint: 1024, // от 1024
         showArrows: true,
         showDots: true,
-        slidesToShow: 3,
+        slidesToShow: 2,
         loop: true,
         easing: 'linear',
         speed: 1000,
