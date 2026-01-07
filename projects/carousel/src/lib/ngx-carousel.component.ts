@@ -51,6 +51,9 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
   @ContentChild('iconRight', { static: true }) iconRight!: TemplateRef<any>
   @ContentChild('btnLeft', { static: true }) btnLeft!: TemplateRef<any>
   @ContentChild('btnRight', { static: true }) btnRight!: TemplateRef<any>
+  @ContentChild('stopBtn', { static: true }) stopBtn!: TemplateRef<any>
+  @ContentChild('iconPause', { static: true }) iconPause!: TemplateRef<any>
+  @ContentChild('iconPlay', { static: true }) iconPlay!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2);
   private resizeObserver!: ResizeObserver;

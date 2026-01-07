@@ -78,7 +78,10 @@
     <div class="ngx-carousel__custom-btn">
       <ng-container 
         [ngTemplateOutlet]="stopBtn || defaulStoptBtn"
-        [ngTemplateOutletContext]="{autoplay, nonStop}"
+        [ngTemplateOutletContext]="{
+          autoplay: autoplay,
+          nonStop: nonStop
+        }"
       />
     </div>
 

@@ -25,6 +25,16 @@
       <app-slide [slide]="slide" />
     </ng-template>
 
+    <ng-template 
+      #stopBtn
+      let-autoplay="autoplay"
+      let-nonStop="nonStop"
+    >
+      <button (click)="autoplay.toggle(); nonStop.toggle()">
+        click
+      </button>
+    </ng-template>
+
   </lib-ngx-carousel>
 </div>
 
