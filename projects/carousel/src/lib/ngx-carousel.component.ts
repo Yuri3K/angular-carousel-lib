@@ -21,6 +21,7 @@ import { NgxSwipeService } from './services/ngx-swipe.service';
 import { NgxStateService } from './services/ngx-state.service';
 import { NgxCarouselConfig } from './ngx-carousel.types';
 import { NgxLayoutService } from './services/ngx-layout.service';
+import { NgxNonStopService } from './services/ngx-non-stop.service';
 
 @Component({
   selector: 'lib-ngx-carousel',
@@ -33,6 +34,7 @@ import { NgxLayoutService } from './services/ngx-layout.service';
     NgxSwipeService,
     NgxStateService,
     NgxLayoutService,
+    NgxNonStopService,
   ],
 })
 export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -41,14 +43,14 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
 
   slides = input.required<any[]>()
   config = input<NgxCarouselConfig>({})
-  
+
   @ViewChild('carouselList', { static: true }) carouselList!: ElementRef<HTMLDivElement>;
   @ContentChild('slideTemplate', { static: true }) slideTemplate!: TemplateRef<any>;
-  @ContentChild('controlsTemplate', {static: true}) controlsTemplate!: TemplateRef<any>
-  @ContentChild('iconLeft', {static: true}) iconLeft!: TemplateRef<any>
-  @ContentChild('iconRight', {static: true}) iconRight!: TemplateRef<any>
-  @ContentChild('btnLeft', {static: true}) btnLeft!: TemplateRef<any>
-  @ContentChild('btnRight', {static: true}) btnRight!: TemplateRef<any>
+  @ContentChild('controlsTemplate', { static: true }) controlsTemplate!: TemplateRef<any>
+  @ContentChild('iconLeft', { static: true }) iconLeft!: TemplateRef<any>
+  @ContentChild('iconRight', { static: true }) iconRight!: TemplateRef<any>
+  @ContentChild('btnLeft', { static: true }) btnLeft!: TemplateRef<any>
+  @ContentChild('btnRight', { static: true }) btnRight!: TemplateRef<any>
 
   private readonly renderer = inject(Renderer2);
   private resizeObserver!: ResizeObserver;
@@ -58,6 +60,7 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
   swipe = inject(NgxSwipeService);
   state = inject(NgxStateService);
   layout = inject(NgxLayoutService);
+  nonStop = inject(NgxNonStopService);
 
   constructor() {
     effect(() => {
@@ -78,6 +81,11 @@ export class NgxCarouselComponent implements OnInit, AfterViewInit, OnDestroy {
     this.swipe.setRenderer(this.renderer);
 
     this.resizeObserver.observe(this.carouselList.nativeElement);
+
+    // console.log("🔸 this.state.mode():", this.state.mode())
+    if (this.state.mode() === 'non-stop') {
+      this.nonStop.start();
+    }
   }
 
   private watchResize() {

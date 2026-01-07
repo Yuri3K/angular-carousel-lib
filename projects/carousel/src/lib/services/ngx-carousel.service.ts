@@ -96,6 +96,7 @@ export class NgxCarouselService {
           }
         })
       })
+
     }, this.state.speed());
   }
 

@@ -2,7 +2,12 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  height: var(--carousel-list-height, auto);
+
+  // Эта высота применится ко всей карусели и если внизу будут добавлены 
+  // кастомные элементы управления без position: absolute, то эти элементы 
+  // видны не будут. Чтобы кастомные элементы стали видны, нужно управлять 
+  // токеном --carousel-list-height
+  height: var(--carousel-height, auto);  
 
   &:focus-visible {
     outline: var(--carousel-outline, 2px solid #005fcc);
@@ -37,6 +42,11 @@
   display: flex;
   flex-shrink: 0;
   position: relative;
+  box-shadow: 0 0 0 1px red;
+
+  &.no-interaction {
+    pointer-events: none;
+  }
   
 
   // &.active {

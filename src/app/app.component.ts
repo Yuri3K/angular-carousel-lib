@@ -39,6 +39,7 @@ export class AppComponent {
   ]
 
   customConfig: NgxCarouselConfig = {
+    mode: 'non-stop',
     autoplay: false,
     interval: 1000,
     loop: true,
@@ -68,10 +69,13 @@ export class AppComponent {
         showDots: true,
         slidesToShow: 3,
         loop: true,
-        autoplay: true,
+        easing: 'linear',
         speed: 1000,
-        interval: 0,
-        easing: 'linear'
+        interval: 50,
+        // autoplay: true,
+
+        mode: 'non-stop',
+        nonStopSpeed: 330
       },
 
     ]

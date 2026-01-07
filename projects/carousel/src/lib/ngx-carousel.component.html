@@ -19,7 +19,11 @@
     [class.no-transition]="carousel.disableTransition()"
     [class.grabbing]="swipe.isSwiping()"
     [style.transform]="layout.translatePx()"
-    [style.transition]="`transform ${state.speed()}ms ${state.easing()}`"
+    [style.transition]="
+      state.mode() == 'non-stop'
+        ? 'none'
+        : `transform ${state.speed()}ms ${state.easing()}`
+    "
     (pointerdown)="swipe.onPointerDown($event)"
     (pointermove)="swipe.onPointerMove($event)"
     (pointerup)="swipe.onPointerUp($event)"
@@ -31,6 +35,7 @@
         role="option"
         aria-roledescription="slide"
         class="ngx-carousel__slide"
+        [class.no-interaction]="state.mode() == 'non-stop'"
         [class.active]="i === state.currentSlide()"
         [style.width]="layout.slideWidthPx() + 'px'"
         [style.marginRight.px]="state.space()"

@@ -15,6 +15,12 @@ export class NgxLayoutService {
 
   translatePx = computed(() => {
     if (this.state.isFade()) return 'none';
-    return `translate(-${this.state.currentSlide() * this.slideStepPx()}px)`;
+
+    if (this.state.mode() == 'non-stop') {
+      console.log("!!! IN !!!")
+      return `translateX(${-this.state.nonStopOffsetPx()}px)`
+    }
+
+    return `translateX(-${this.state.currentSlide() * this.slideStepPx()}px)`;
   });
 }

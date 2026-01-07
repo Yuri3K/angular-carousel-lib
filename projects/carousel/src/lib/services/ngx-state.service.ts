@@ -7,6 +7,7 @@ export class NgxStateService {
   width = signal(0)
   slides = signal<any[]>([]);
   currentSlide = signal(0);
+  nonStopOffsetPx = signal(0); // для режима 'non-stop' (безостановочное прокручивание ленты)
 
   private appCfg = inject(NGX_CAROUSEL_CONFIG, { optional: true });
 
@@ -31,6 +32,8 @@ export class NgxStateService {
   isDots = computed(() => this.activeConfig().showDots)
   speed = computed(() => this.activeConfig().speed ?? 500)
   easing = computed(() => this.activeConfig().easing ?? 'ease')
+  mode = computed(() => this.activeConfig().mode ?? 'carousel')
+  nonStopSpeed = computed(() => this.activeConfig().nonStopSpeed ?? 40)
 
   /* ========= BREAKPOINTS ========= */
   activeBreakpoint = computed<Partial<NgxCarouselConfig> | null>(() => {
@@ -53,6 +56,14 @@ export class NgxStateService {
 
     if (!this.loop() || slides.length < count) {
       return slides;
+    }
+
+    if(this.mode() == 'non-stop') {
+      return [
+        ...slides,
+        ...slides,
+        ...slides,
+      ]
     }
 
     return [
