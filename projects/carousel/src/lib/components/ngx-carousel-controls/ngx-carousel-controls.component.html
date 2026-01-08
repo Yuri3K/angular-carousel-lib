@@ -92,7 +92,7 @@
         (click)="nonStop.toggle(); autoplay.toggle()"
         aria-label="Toggle autoplay"
       >
-        @if(state.mode() == 'non-stop' && nonStop.rafId) {
+        @if(state.mode() == 'non-stop' && nonStop.rafId()) {
           <ng-container 
             [ngTemplateOutlet]="iconPause || defaultIconPause"
           />

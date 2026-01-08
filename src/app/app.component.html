@@ -30,8 +30,14 @@
       let-autoplay="autoplay"
       let-nonStop="nonStop"
     >
-      <button (click)="autoplay.toggle(); nonStop.toggle()">
-        click
+      <button 
+        [ariaLabel]="
+				nonStop.rafId
+					? 'Pause carousel'
+					: 'Play carousel'
+			  "
+        (click)="autoplay.toggle(); nonStop.toggle()">
+        stop
       </button>
     </ng-template>
 

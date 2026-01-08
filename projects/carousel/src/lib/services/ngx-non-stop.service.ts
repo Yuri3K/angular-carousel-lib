@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { NgxStateService } from './ngx-state.service';
 import { NgxLayoutService } from './ngx-layout.service';
 
@@ -7,20 +7,21 @@ export class NgxNonStopService {
   private state = inject(NgxStateService);
   private layout = inject(NgxLayoutService);
 
-  rafId: number | null = null;
+  rafId = signal<number | null>(null);
   private lastTime = 0;
 
   start() {
-    if (this.rafId !== null) return;
+    if (this.rafId() !== null) return;
 
     this.lastTime = performance.now();
-    this.rafId = requestAnimationFrame(this.tick);
+    this.rafId.set(requestAnimationFrame(this.tick));
   }
 
   stop() {
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
+    const id = this.rafId();
+    if (id !== null) {
+      cancelAnimationFrame(id);
+      this.rafId.set(null);
     }
   }
 
@@ -40,13 +41,13 @@ export class NgxNonStopService {
       this.state.nonStopOffsetPx.set(0);
     }
 
-    this.rafId = requestAnimationFrame(this.tick);
+    this.rafId.set(requestAnimationFrame(this.tick));
   };
 
   toggle() {
-    if(this.state.mode() !== 'non-stop') return
+    if (this.state.mode() !== 'non-stop') return
 
-    this.rafId 
+    this.rafId()
       ? this.stop()
       : this.start()
   }
